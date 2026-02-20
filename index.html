@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIAG Argentina S.A.U. — Finanzas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --bg-white: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --text-label: #64748b;
+            --blue-600: #2563eb;
+            --blue-500: #3b82f6;
+            --blue-50: #eff6ff;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --green-50: #ecfdf5;
+            --red-600: #dc2626;
+            --red-500: #ef4444;
+            --red-50: #fef2f2;
+            --amber-600: #d97706;
+            --amber-500: #f59e0b;
+            --amber-50: #fffbeb;
+            --purple-600: #7c3aed;
+            --purple-500: #8b5cf6;
+            --purple-50: #f5f3ff;
+            --navy: #1e293b;
+            --navy-dark: #0f172a;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--navy-dark);
+            color: white;
+            padding: 0 40px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo {
+            width: 36px;
+            height: 36px;
+            background: var(--blue-500);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -1px;
+        }
+
+        .header-brand h1 {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .header-brand span {
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+            margin-left: 8px;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .header-meta strong {
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+        }
+
+        .header-date {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ===== NAV ===== */
+        .nav {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 40px;
+            display: flex;
+            gap: 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-tab {
+            padding: 14px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            border-bottom: 2px solid transparent;
+            background: none;
+            font-family: inherit;
+            transition: all 0.15s ease;
+            letter-spacing: -0.1px;
+        }
+
+        .nav-tab:hover { color: var(--text-primary); }
+        .nav-tab.active {
+            color: var(--blue-600);
+            border-bottom-color: var(--blue-600);
+            font-weight: 600;
+        }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 28px 40px;
+        }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .section-header {
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+
+        .section-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ===== KPI CARDS ===== */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .kpi {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 22px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .kpi.kpi-green::before { background: var(--green-500); }
+        .kpi.kpi-red::before { background: var(--red-500); }
+        .kpi.kpi-amber::before { background: var(--amber-500); }
+        .kpi.kpi-blue::before { background: var(--blue-500); }
+        .kpi.kpi-purple::before { background: var(--purple-500); }
+
+        .kpi-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-label);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            line-height: 1;
+        }
+
+        .kpi-value.v-green { color: var(--green-600); }
+        .kpi-value.v-red { color: var(--red-600); }
+        .kpi-value.v-amber { color: var(--amber-600); }
+        .kpi-value.v-blue { color: var(--blue-600); }
+        .kpi-value.v-purple { color: var(--purple-600); }
+
+        .kpi-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 400;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 22px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            color: var(--text-primary);
+        }
+
+        .card-header .card-badge {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: var(--bg-subtle);
+            color: var(--text-label);
+        }
+
+        .card-body { padding: 20px 22px; }
+        .card-body.no-pad { padding: 0; }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .grid-2 .card { margin-bottom: 0; }
+
+        /* ===== TABLES ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 10px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-label);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            background: var(--bg-subtle);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 10px 16px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: var(--blue-50); }
+
+        .text-right { text-align: right; }
+        .text-mono { font-variant-numeric: tabular-nums; }
+        .fw-600 { font-weight: 600; color: var(--text-primary); }
+        .c-green { color: var(--green-600); }
+        .c-red { color: var(--red-600); }
+        .c-amber { color: var(--amber-600); }
+        .c-blue { color: var(--blue-600); }
+        .c-purple { color: var(--purple-600); }
+
+        .row-subtotal td {
+            font-weight: 600;
+            color: var(--text-primary);
+            background: var(--bg-subtle);
+            border-top: 2px solid var(--border);
+        }
+
+        .row-total td {
+            font-weight: 700;
+            color: var(--text-primary);
+            background: var(--blue-50);
+            border-top: 2px solid var(--blue-500);
+            font-size: 13.5px;
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
+        }
+
+        .badge-green { background: var(--green-50); color: var(--green-600); }
+        .badge-red { background: var(--red-50); color: var(--red-600); }
+        .badge-amber { background: var(--amber-50); color: var(--amber-600); }
+        .badge-blue { background: var(--blue-50); color: var(--blue-600); }
+        .badge-purple { background: var(--purple-50); color: var(--purple-600); }
+
+        /* ===== FILTER BUTTONS ===== */
+        .filter-group {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+
+        .filter-btn {
+            padding: 7px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-white);
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.15s ease;
+            letter-spacing: -0.1px;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--blue-500);
+            color: var(--blue-600);
+        }
+
+        .filter-btn.active {
+            background: var(--blue-600);
+            color: white;
+            border-color: var(--blue-600);
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+        }
+
+        /* ===== DIVIDER ===== */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 28px 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+            letter-spacing: 0.2px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1100px) {
+            .kpi-row { grid-template-columns: repeat(2, 1fr); }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 700px) {
+            .kpi-row { grid-template-columns: 1fr; }
+            .container { padding: 16px; }
+            .header { padding: 0 16px; }
+            .nav { padding: 0 16px; }
+        }
+
+        @media print {
+            .nav { position: static; }
+            .section { display: block !important; page-break-inside: avoid; }
+            .section + .section { margin-top: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <div class="header-brand">
+        <div class="header-logo">LA</div>
+        <h1>LIAG Argentina S.A.U.<span>Finanzas</span></h1>
+    </div>
+    <div class="header-meta">
+        <div>TC&nbsp;&nbsp;<strong>USD/ARS 1.425,00</strong></div>
+        <div class="header-date">16 Febrero 2026</div>
+    </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<div class="nav">
+    <button class="nav-tab active" onclick="showSection('overview',this)">Resumen</button>
+    <button class="nav-tab" onclick="showSection('caja',this)">Caja</button>
+    <button class="nav-tab" onclick="showSection('deuda',this)">Deuda</button>
+    <button class="nav-tab" onclick="showSection('nera',this)">NERA</button>
+    <button class="nav-tab" onclick="showSection('pagos',this)">Pagos de Deuda</button>
+    <button class="nav-tab" onclick="showSection('lineas',this)">Lineas de Credito</button>
+</div>
+
+<div class="container">
+
+<!-- ========================================== -->
+<!-- RESUMEN                                    -->
+<!-- ========================================== -->
+<div id="section-overview" class="section active">
+
+    <div class="section-header">
+        <h2>Resumen Ejecutivo</h2>
+        <p>Vista consolidada de la posicion financiera de LIAG Argentina y Nueva Sur</p>
+    </div>
+
+    <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="kpi kpi-green">
+            <div class="kpi-label">Cash & Equivalents</div>
+            <div class="kpi-value v-green">USD 8.117.274</div>
+            <div class="kpi-sub">ARS 11.567 M &middot; Exp. ARS 85,8%</div>
+        </div>
+        <div class="kpi kpi-red">
+            <div class="kpi-label">Deuda Total Pendiente</div>
+            <div class="kpi-value v-red">USD 123.033.090</div>
+            <div class="kpi-sub">LIAG: USD 32,0 M &middot; NS: USD 91,0 M</div>
+        </div>
+        <div class="kpi kpi-amber">
+            <div class="kpi-label">Deuda Plataforma NERA</div>
+            <div class="kpi-value v-amber">USD 3.744.288</div>
+            <div class="kpi-sub">25 obligaciones &middot; Prox vto: 25/Feb</div>
+        </div>
+    </div>
+    <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr); margin-top: -12px;">
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Servicio de Deuda (Ene25-Feb26)</div>
+            <div class="kpi-value v-blue">USD 26.700.699</div>
+            <div class="kpi-sub">Capital: USD 16,9 M &middot; Intereses: USD 5,0 M</div>
+        </div>
+        <div class="kpi kpi-purple">
+            <div class="kpi-label">Lineas de Credito Disponibles</div>
+            <div class="kpi-value v-purple">USD 19.016.807</div>
+            <div class="kpi-sub">39,6% utilizado &middot; 2 lineas vencidas</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>Composicion de Caja</h3>
+                <span class="card-badge">USD</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-container"><canvas id="chartCajaOverview"></canvas></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>Deuda por Acreedor</h3>
+                <span class="card-badge">Capital Pendiente</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-container"><canvas id="chartDeudaOverview"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Cronograma de Vencimientos</h3>
+            <span class="card-badge">LIAG + NS &middot; Capital + Intereses</span>
+        </div>
+        <div class="card-body">
+            <div class="chart-container"><canvas id="chartCronograma"></canvas></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- CAJA                                       -->
+<!-- ========================================== -->
+<div id="section-caja" class="section">
+
+    <div class="section-header">
+        <h2>Cash & Equivalents</h2>
+        <p>Posicion de liquidez al 16 de Febrero de 2026</p>
+    </div>
+
+    <div class="kpi-row">
+        <div class="kpi kpi-green">
+            <div class="kpi-label">Total Posicion</div>
+            <div class="kpi-value v-green">USD 8.117.274</div>
+            <div class="kpi-sub">ARS 11.567.115.377</div>
+        </div>
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Bancos & Comitentes</div>
+            <div class="kpi-value v-blue">USD 1.178.660</div>
+            <div class="kpi-sub">14,5% del total</div>
+        </div>
+        <div class="kpi kpi-amber">
+            <div class="kpi-label">Cheques a Cobrar</div>
+            <div class="kpi-value v-amber">USD 1.362.222</div>
+            <div class="kpi-sub">16,8% del total</div>
+        </div>
+        <div class="kpi kpi-purple">
+            <div class="kpi-label">Inversiones CP (FCI + LECAPs)</div>
+            <div class="kpi-value v-purple">USD 5.576.392</div>
+            <div class="kpi-sub">68,7% del total</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header"><h3>Distribucion por Tipo</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartCajaTipo"></canvas></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3>Exposicion Cambiaria</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartCajaFX"></canvas></div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Cuentas Bancarias y Comitentes</h3></div>
+        <div class="card-body no-pad">
+            <table>
+                <thead><tr><th>Cuenta</th><th>Entidad</th><th>Moneda</th><th class="text-right">Saldo ARS</th><th class="text-right">Saldo USD</th></tr></thead>
+                <tbody>
+                    <tr><td>Cuenta Corriente</td><td>Banco Galicia</td><td><span class="badge badge-blue">ARS</span></td><td class="text-right text-mono">34.000.000</td><td class="text-right text-mono">23.860</td></tr>
+                    <tr><td>Comitente</td><td>GSEC</td><td><span class="badge badge-green">USD</span></td><td class="text-right text-mono">712.500.000</td><td class="text-right text-mono fw-600">500.000</td></tr>
+                    <tr><td>Cuenta Corriente</td><td>Santander UY</td><td><span class="badge badge-green">USD</span></td><td class="text-right text-mono">110.865.000</td><td class="text-right text-mono fw-600">77.800</td></tr>
+                    <tr><td>Garantias Matba-ROFEX</td><td>Matba FyO</td><td><span class="badge badge-green">USD</span></td><td class="text-right text-mono">109.725.000</td><td class="text-right text-mono fw-600">77.000</td></tr>
+                    <tr><td>Comitente</td><td>FyO</td><td><span class="badge badge-green">USD</span></td><td class="text-right text-mono">712.500.000</td><td class="text-right text-mono fw-600">500.000</td></tr>
+                    <tr class="row-subtotal"><td colspan="3">Subtotal Bancos & Comitentes</td><td class="text-right text-mono">1.679.590.000</td><td class="text-right text-mono c-blue">1.178.660</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Inversiones de Corto Plazo</h3><span class="card-badge">FCI + LECAPs</span></div>
+        <div class="card-body no-pad">
+            <table>
+                <thead><tr><th>Instrumento</th><th>Entidad</th><th class="text-right">Saldo ARS</th><th class="text-right">Saldo USD</th></tr></thead>
+                <tbody>
+                    <tr><td>FCI Money Market</td><td>Galicia (IyE)</td><td class="text-right text-mono">65.000.000</td><td class="text-right text-mono">45.614</td></tr>
+                    <tr><td>FCI Money Market</td><td>Galicia</td><td class="text-right text-mono">439.030.000</td><td class="text-right text-mono">308.091</td></tr>
+                    <tr><td>FCI Money Market</td><td>Comafi (IyE)</td><td class="text-right text-mono">31.000.000</td><td class="text-right text-mono">21.754</td></tr>
+                    <tr><td>FCI Money Market</td><td>FyO</td><td class="text-right text-mono">6.000.000</td><td class="text-right text-mono">4.211</td></tr>
+                    <tr><td>FCI Money Market</td><td>Granar</td><td class="text-right text-mono">139.000.000</td><td class="text-right text-mono">97.544</td></tr>
+                    <tr><td>FCI Money Market</td><td>GSEC</td><td class="text-right text-mono">4.150.211.000</td><td class="text-right text-mono fw-600">2.912.429</td></tr>
+                    <tr><td>LECAPs (T-Bills)</td><td>Varios brokers</td><td class="text-right text-mono">3.116.117.993</td><td class="text-right text-mono fw-600">2.186.749</td></tr>
+                    <tr class="row-subtotal"><td colspan="2">Subtotal Inversiones CP</td><td class="text-right text-mono">7.946.358.993</td><td class="text-right text-mono c-purple">5.576.392</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Cheques a Cobrar</h3></div>
+        <div class="card-body no-pad">
+            <table>
+                <thead><tr><th>Concepto</th><th>Plazo</th><th class="text-right">Saldo ARS</th><th class="text-right">Saldo USD</th></tr></thead>
+                <tbody>
+                    <tr><td>Cheques a Depositar</td><td><span class="badge badge-green">Semana 1 (al dia)</span></td><td class="text-right text-mono">1.221.006.000</td><td class="text-right text-mono fw-600">856.846</td></tr>
+                    <tr><td>Cheques a Depositar</td><td><span class="badge badge-amber">Semana 2</span></td><td class="text-right text-mono">720.160.384</td><td class="text-right text-mono">505.376</td></tr>
+                    <tr><td>Cheques a Depositar</td><td>Semana 3</td><td class="text-right text-mono">—</td><td class="text-right text-mono">0</td></tr>
+                    <tr><td>Cheques a Depositar</td><td>Semana 4</td><td class="text-right text-mono">0</td><td class="text-right text-mono">0</td></tr>
+                    <tr class="row-subtotal"><td colspan="2">Subtotal Cheques</td><td class="text-right text-mono">1.941.166.384</td><td class="text-right text-mono c-amber">1.362.222</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- DEUDA                                      -->
+<!-- ========================================== -->
+<div id="section-deuda" class="section">
+
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:flex-end;">
+        <div>
+            <h2>Posicion de Deuda</h2>
+            <p>Detalle de prestamos, vencimientos y reestructuracion</p>
+        </div>
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="filterDeuda('all',this)">Todos</button>
+            <button class="filter-btn" onclick="filterDeuda('LIAG',this)">LIAG</button>
+            <button class="filter-btn" onclick="filterDeuda('NS',this)">Nueva Sur</button>
+        </div>
+    </div>
+
+    <div id="deuda-kpis"></div>
+    <div id="deuda-charts" class="grid-2" style="margin-bottom:20px;"></div>
+    <div id="deuda-tabla-prestamos"></div>
+    <div id="deuda-tabla-cronograma"></div>
+    <div id="deuda-tabla-rabo"></div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- NERA                                       -->
+<!-- ========================================== -->
+<div id="section-nera" class="section">
+
+    <div class="section-header">
+        <h2>Plataforma NERA</h2>
+        <p>Obligaciones financieras en plataforma de negociacion electronica</p>
+    </div>
+
+    <div class="kpi-row">
+        <div class="kpi kpi-amber">
+            <div class="kpi-label">Total Deuda NERA</div>
+            <div class="kpi-value v-amber">USD 3.744.288</div>
+            <div class="kpi-sub">25 obligaciones activas</div>
+        </div>
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Santander</div>
+            <div class="kpi-value v-blue">USD 1.858.566</div>
+            <div class="kpi-sub">49,6% del total</div>
+        </div>
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Galicia</div>
+            <div class="kpi-value v-blue">USD 1.852.098</div>
+            <div class="kpi-sub">49,5% del total</div>
+        </div>
+        <div class="kpi kpi-red">
+            <div class="kpi-label">Proximo Vencimiento</div>
+            <div class="kpi-value v-red">25/Feb/2026</div>
+            <div class="kpi-sub">Galicia &middot; USD 42.421</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header"><h3>Distribucion por Banco</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartNeraBanco"></canvas></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3>Vencimientos Mensuales</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartNeraMensual"></canvas></div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Detalle de Obligaciones</h3><span class="card-badge">Ordenado por vencimiento</span></div>
+        <div class="card-body no-pad">
+            <table>
+                <thead><tr><th>Banco</th><th class="text-right">Monto USD</th><th>Vencimiento</th><th>Estado</th></tr></thead>
+                <tbody id="neraTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- PAGOS DE DEUDA                             -->
+<!-- ========================================== -->
+<div id="section-pagos" class="section">
+
+    <div class="section-header">
+        <h2>Pagos de Deuda</h2>
+        <p>Flujos de prestamos — Enero 2025 a Febrero 2026</p>
+    </div>
+
+    <div class="kpi-row">
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Servicio de Deuda Total</div>
+            <div class="kpi-value v-blue">USD 26.700.699</div>
+            <div class="kpi-sub">Total egresos del periodo</div>
+        </div>
+        <div class="kpi kpi-red">
+            <div class="kpi-label">Pago de Capital</div>
+            <div class="kpi-value v-red">USD 16.867.411</div>
+            <div class="kpi-sub">63,2% del total</div>
+        </div>
+        <div class="kpi kpi-amber">
+            <div class="kpi-label">Pago de Intereses</div>
+            <div class="kpi-value v-amber">USD 5.042.629</div>
+            <div class="kpi-sub">18,9% del total</div>
+        </div>
+        <div class="kpi kpi-purple">
+            <div class="kpi-label">Retencion Ganancias</div>
+            <div class="kpi-value v-purple">USD 4.790.659</div>
+            <div class="kpi-sub">Glycinemax (VEP)</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header"><h3>Descomposicion de Pagos</h3><span class="card-badge">USD</span></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartPagosTipo"></canvas></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3>Pagos por Banco</h3><span class="card-badge">USD</span></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartPagosBanco"></canvas></div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Detalle de Movimientos</h3><span class="card-badge">Orden cronologico</span></div>
+        <div class="card-body no-pad">
+            <table>
+                <thead><tr><th>Fecha</th><th>Descripcion</th><th>Tipo</th><th>Banco</th><th class="text-right">Pago USD</th><th class="text-right">Ingreso USD</th></tr></thead>
+                <tbody id="pagosTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- LINEAS DE CREDITO                         -->
+<!-- ========================================== -->
+<div id="section-lineas" class="section">
+
+    <div class="section-header">
+        <h2>Lineas de Credito</h2>
+        <p>Seguimiento de lineas de credito aprobadas — LIAG Argentina S.A.U.</p>
+    </div>
+
+    <div class="kpi-row">
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Total Lineas (USD equiv.)</div>
+            <div class="kpi-value v-blue">USD 38.368.421</div>
+            <div class="kpi-sub">USD 19,0 M + ARS 27.600 M</div>
+        </div>
+        <div class="kpi kpi-red">
+            <div class="kpi-label">Utilizado (USD equiv.)</div>
+            <div class="kpi-value v-red">USD 15.210.614</div>
+            <div class="kpi-sub">39,6% de utilizacion</div>
+        </div>
+        <div class="kpi kpi-green">
+            <div class="kpi-label">Disponible (USD equiv.)</div>
+            <div class="kpi-value v-green">USD 19.016.807</div>
+            <div class="kpi-sub">Margen disponible para uso</div>
+        </div>
+        <div class="kpi kpi-amber">
+            <div class="kpi-label">Lineas Vencidas</div>
+            <div class="kpi-value v-amber">2</div>
+            <div class="kpi-sub">Comafi &middot; Santander &mdash; En renovacion</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header"><h3>Utilizacion por Banco</h3><span class="card-badge">USD equiv.</span></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartLineasUtil"></canvas></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3>Estado de Lineas</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartLineasEstado"></canvas></div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Detalle de Lineas de Credito</h3><span class="card-badge">Todas las lineas</span></div>
+        <div class="card-body no-pad">
+            <table>
+                <thead><tr><th>Banco</th><th>Tipo</th><th>Moneda</th><th class="text-right">Monto Total</th><th class="text-right">Utilizado</th><th class="text-right">Disponible</th><th class="text-right">% Util.</th><th>Vencimiento</th><th class="text-right">Tasa</th><th>Estado</th><th>Comentarios</th></tr></thead>
+                <tbody id="lineasTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Utilizacion vs Disponible</h3><span class="card-badge">Por banco &middot; USD equivalente</span></div>
+        <div class="card-body">
+            <div class="chart-container"><canvas id="chartLineasStacked"></canvas></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    LIAG Argentina S.A.U. &mdash; Dashboard Financiero &middot; Datos al 16/02/2026 &middot; Actualizacion semanal
+</div>
+
+</div>
+
+<script>
+// ===== NAVIGATION =====
+function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ===== CHART CONFIG =====
+Chart.defaults.color = '#64748b';
+Chart.defaults.borderColor = '#e2e8f0';
+Chart.defaults.font.family = 'Inter, -apple-system, sans-serif';
+Chart.defaults.font.size = 12;
+
+const fmtUSD = (v) => 'USD ' + v.toLocaleString('es-AR');
+const palette = ['#2563eb','#059669','#d97706','#dc2626','#7c3aed','#06b6d4','#64748b','#be185d'];
+
+function chartOpts(type, extra = {}) {
+    return {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right', labels: { padding: 14, usePointStyle: true, pointStyle: 'circle', font: { size: 12, weight: '500' } } },
+            tooltip: { backgroundColor: '#0f172a', titleFont: { size: 12, weight: '600' }, bodyFont: { size: 12 }, padding: 10, cornerRadius: 6, callbacks: { label: (ctx) => ' ' + ctx.label + ': ' + fmtUSD(ctx.raw) } },
+            ...extra.plugins
+        },
+        ...extra
+    };
+}
+
+// ===== OVERVIEW: CAJA =====
+new Chart(document.getElementById('chartCajaOverview'), {
+    type: 'doughnut',
+    data: { labels: ['Bancos & Comitentes','Cheques a Cobrar','FCI Money Market','LECAPs'], datasets: [{ data: [1178660,1362222,3389643,2186749], backgroundColor: ['#2563eb','#d97706','#7c3aed','#06b6d4'], borderWidth: 0 }] },
+    options: chartOpts('doughnut', { cutout: '65%' })
+});
+
+// ===== OVERVIEW: DEUDA =====
+new Chart(document.getElementById('chartDeudaOverview'), {
+    type: 'bar',
+    data: { labels: ['Rabobank (NS)','Itau','Galicia','Comafi','Macro','BaPro','J. Deere'], datasets: [{ data: [91000000,20000000,5399297,3000000,3000000,361092,272700], backgroundColor: palette, borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: (ctx) => fmtUSD(ctx.raw) } } }, scales: { x: { ticks: { callback: v => v >= 1e6 ? (v/1e6)+'M' : v.toLocaleString() }, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } } }
+});
+
+// ===== OVERVIEW: CRONOGRAMA =====
+new Chart(document.getElementById('chartCronograma'), {
+    type: 'bar',
+    data: { labels: ['2026','2027','2028','2029','2030','2031','2032'], datasets: [
+        { label: 'LIAG', data: [19892547,14517392,208007,148497,0,0,0], backgroundColor: '#2563eb', borderRadius: 3 },
+        { label: 'NS (Rabobank)', data: [5637450,17153500,20898150,19997250,23277800,21585200,19892600], backgroundColor: '#dc2626', borderRadius: 3 }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { weight: '500' } } }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + fmtUSD(ctx.raw) } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => (v/1e6).toFixed(0)+'M' }, grid: { color: '#f1f5f9' } } } }
+});
+
+// ===== CAJA: TIPO =====
+new Chart(document.getElementById('chartCajaTipo'), {
+    type: 'doughnut',
+    data: { labels: ['Bancos & Comitentes','Cheques a Cobrar','FCI Money Market','LECAPs'], datasets: [{ data: [1178660,1362222,3389643,2186749], backgroundColor: ['#2563eb','#d97706','#7c3aed','#06b6d4'], borderWidth: 0 }] },
+    options: chartOpts('doughnut', { cutout: '65%' })
+});
+
+// ===== CAJA: FX =====
+new Chart(document.getElementById('chartCajaFX'), {
+    type: 'doughnut',
+    data: { labels: ['ARS (85,8%)','USD (14,2%)'], datasets: [{ data: [6962474,1154800], backgroundColor: ['#2563eb','#059669'], borderWidth: 0 }] },
+    options: chartOpts('doughnut', { cutout: '65%' })
+});
+
+// ===== DEUDA: INTERACTIVE DATA & RENDERING =====
+const deudaPrestamos = [
+    {emp:'LIAG',banco:'BaPro',nombre:'Bapro 0%',tasa:0,tasaStr:'0,00%',capital:361092,tasaHigh:false},
+    {emp:'LIAG',banco:'Comafi',nombre:'Comafi 8,7%',tasa:8.7,tasaStr:'8,70%',capital:3000000,tasaHigh:false},
+    {emp:'LIAG',banco:'Galicia',nombre:'Prefi 11,5%',tasa:11.5,tasaStr:'11,50%',capital:5035500,tasaHigh:true},
+    {emp:'LIAG',banco:'Galicia',nombre:'Prendario 8,75%',tasa:8.75,tasaStr:'8,75%',capital:363797,tasaHigh:false},
+    {emp:'LIAG',banco:'Itau',nombre:'Itau 8,15%',tasa:8.15,tasaStr:'8,15%',capital:20000000,tasaHigh:false},
+    {emp:'LIAG',banco:'John Deere',nombre:'Prendario JD 0%',tasa:0,tasaStr:'0,00%',capital:272700,tasaHigh:false},
+    {emp:'LIAG',banco:'Macro',nombre:'Macro 10%',tasa:10,tasaStr:'10,00%',capital:3000000,tasaHigh:true},
+    {emp:'NS',banco:'Rabobank',nombre:'Rabo 8,85%',tasa:8.85,tasaStr:'8,85%',capital:91000000,tasaHigh:false}
+];
+
+const deudaCrono = {
+    LIAG: {2026:19892547,2027:14517392,2028:208007,2029:148497,2030:0,2031:0,2032:0,total:34766443},
+    NS:   {2026:5637450,2027:17153500,2028:20898150,2029:19997250,2030:23277800,2031:21585200,2032:19892600,total:128441950}
+};
+
+const raboAmort = [
+    {fecha:'15/10/2026',saldo:91000000,pctAmort:'0,0%',amort:0,tasa:'8,85%',tasaHigh:false,interes:5659821,pagoTotal:5659821},
+    {fecha:'15/10/2027',saldo:91000000,pctAmort:'10,0%',amort:9100000,tasa:'8,85%',tasaHigh:false,interes:8053500,pagoTotal:17153500},
+    {fecha:'15/10/2028',saldo:81900000,pctAmort:'15,0%',amort:13650000,tasa:'8,85%',tasaHigh:false,interes:7248150,pagoTotal:20898150},
+    {fecha:'15/10/2029',saldo:68250000,pctAmort:'15,0%',amort:13650000,tasa:'9,30%',tasaHigh:true,interes:6347250,pagoTotal:19997250},
+    {fecha:'15/10/2030',saldo:54600000,pctAmort:'20,0%',amort:18200000,tasa:'9,30%',tasaHigh:true,interes:5077800,pagoTotal:23277800},
+    {fecha:'15/10/2031',saldo:36400000,pctAmort:'20,0%',amort:18200000,tasa:'9,30%',tasaHigh:true,interes:3385200,pagoTotal:21585200},
+    {fecha:'15/10/2032',saldo:18200000,pctAmort:'20,0%',amort:18200000,tasa:'9,30%',tasaHigh:true,interes:1692600,pagoTotal:19892600}
+];
+
+let chartDeudaBanco = null;
+let chartDeudaVenc = null;
+const fmt = v => v.toLocaleString('es-AR');
+
+function filterDeuda(filter, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderDeuda(filter);
+}
+
+function renderDeuda(filter) {
+    const showLIAG = filter === 'all' || filter === 'LIAG';
+    const showNS = filter === 'all' || filter === 'NS';
+    const filtered = deudaPrestamos.filter(p => (p.emp === 'LIAG' && showLIAG) || (p.emp === 'NS' && showNS));
+    const totalCapital = filtered.reduce((s,p) => s + p.capital, 0);
+    const liagCapital = deudaPrestamos.filter(p => p.emp === 'LIAG').reduce((s,p) => s + p.capital, 0);
+    const nsCapital = deudaPrestamos.filter(p => p.emp === 'NS').reduce((s,p) => s + p.capital, 0);
+    const nPrestamos = filtered.filter(p => p.capital > 0).length;
+
+    // Vencimientos 2026
+    let venc2026 = 0;
+    if (showLIAG) venc2026 += deudaCrono.LIAG[2026];
+    if (showNS) venc2026 += deudaCrono.NS[2026];
+
+    // KPIs
+    let kpiHTML = '<div class="kpi-row">';
+    kpiHTML += '<div class="kpi kpi-red"><div class="kpi-label">Capital Pendiente'+(filter==='all'?' Total':'')+'</div><div class="kpi-value v-red">USD '+fmt(totalCapital)+'</div><div class="kpi-sub">'+(filter==='all'?'LIAG + Nueva Sur':filter==='LIAG'?nPrestamos+' prestamos activos':'Rabobank &middot; Reestructurado')+'</div></div>';
+    if (filter === 'all') {
+        kpiHTML += '<div class="kpi kpi-amber"><div class="kpi-label">Capital LIAG</div><div class="kpi-value v-amber">USD '+fmt(liagCapital)+'</div><div class="kpi-sub">7 prestamos activos</div></div>';
+        kpiHTML += '<div class="kpi kpi-amber"><div class="kpi-label">Capital NS (Rabobank)</div><div class="kpi-value v-amber">USD '+fmt(nsCapital)+'</div><div class="kpi-sub">Tasa 8,85% &middot; Reestructurado</div></div>';
+    } else {
+        kpiHTML += '<div class="kpi kpi-amber"><div class="kpi-label">Prestamos Activos</div><div class="kpi-value v-amber">'+nPrestamos+'</div><div class="kpi-sub">'+(filter==='LIAG'?'6 bancos diferentes':'1 acreedor')+'</div></div>';
+        const tasaProm = filter==='NS'?'8,85%':'Var.';
+        kpiHTML += '<div class="kpi kpi-amber"><div class="kpi-label">Tasa Promedio</div><div class="kpi-value v-amber">'+tasaProm+'</div><div class="kpi-sub">'+(filter==='NS'?'SOFR + 5,00% spread':'0% a 11,5%')+'</div></div>';
+    }
+    kpiHTML += '<div class="kpi kpi-blue"><div class="kpi-label">Vencimientos 2026</div><div class="kpi-value v-blue">USD '+fmt(venc2026)+'</div><div class="kpi-sub">'+(filter==='all'?'LIAG + NS':filter)+'</div></div>';
+    kpiHTML += '</div>';
+    document.getElementById('deuda-kpis').innerHTML = kpiHTML;
+
+    // Charts
+    let chartsHTML = '<div class="card" style="margin-bottom:0;"><div class="card-header"><h3>Deuda por Banco</h3><span class="card-badge">Capital Pendiente</span></div><div class="card-body"><div class="chart-container"><canvas id="chartDeudaBanco"></canvas></div></div></div>';
+    chartsHTML += '<div class="card" style="margin-bottom:0;"><div class="card-header"><h3>Vencimientos Anuales</h3><span class="card-badge">'+(filter==='all'?'LIAG + NS':filter)+'</span></div><div class="card-body"><div class="chart-container"><canvas id="chartVencimientos"></canvas></div></div></div>';
+    document.getElementById('deuda-charts').innerHTML = chartsHTML;
+
+    // Chart: Deuda por banco (doughnut)
+    const bancoAgg = {};
+    filtered.forEach(p => { bancoAgg[p.banco] = (bancoAgg[p.banco]||0) + p.capital; });
+    const bancoEntries = Object.entries(bancoAgg).sort((a,b) => b[1]-a[1]);
+    const bancoTotal = bancoEntries.reduce((s,e) => s+e[1], 0);
+    const bancoLabels = bancoEntries.map(e => e[0]+' '+(e[1]/bancoTotal*100).toFixed(1)+'%');
+
+    chartDeudaBanco = new Chart(document.getElementById('chartDeudaBanco'), {
+        type: 'doughnut',
+        data: { labels: bancoLabels, datasets: [{ data: bancoEntries.map(e => e[1]), backgroundColor: palette, borderWidth: 0 }] },
+        options: chartOpts('doughnut', { cutout: '65%' })
+    });
+
+    // Chart: Vencimientos anuales
+    const years = ['2026','2027','2028','2029','2030','2031','2032'];
+    let vencDatasets = [];
+    if (filter === 'all') {
+        vencDatasets = [
+            { label: 'LIAG', data: years.map(y => deudaCrono.LIAG[y]), backgroundColor: '#2563eb', borderRadius: 3 },
+            { label: 'NS (Rabobank)', data: years.map(y => deudaCrono.NS[y]), backgroundColor: '#dc2626', borderRadius: 3 }
+        ];
+    } else if (filter === 'LIAG') {
+        vencDatasets = [{ label: 'LIAG', data: years.map(y => deudaCrono.LIAG[y]), backgroundColor: '#2563eb', borderRadius: 3 }];
+    } else {
+        vencDatasets = [{ label: 'NS (Rabobank)', data: years.map(y => deudaCrono.NS[y]), backgroundColor: '#dc2626', borderRadius: 3 }];
+    }
+
+    chartDeudaVenc = new Chart(document.getElementById('chartVencimientos'), {
+        type: 'bar',
+        data: { labels: years, datasets: vencDatasets },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', display: filter==='all', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { weight: '500' } } }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => ' '+(ctx.dataset.label||'')+': '+fmtUSD(ctx.raw) } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => (v/1e6).toFixed(0)+'M' }, grid: { color: '#f1f5f9' } } } }
+    });
+
+    // Table: Prestamos
+    let tblP = '<div class="card"><div class="card-header"><h3>Resumen de Prestamos</h3><span class="card-badge">Capital Pendiente</span></div><div class="card-body no-pad"><table><thead><tr><th>Empresa</th><th>Banco</th><th>Prestamo</th><th class="text-right">Tasa</th><th class="text-right">Capital USD</th></tr></thead><tbody>';
+    const empresas = [...new Set(filtered.map(p => p.emp))];
+    empresas.forEach(emp => {
+        const rows = filtered.filter(p => p.emp === emp);
+        const subTotal = rows.reduce((s,r) => s+r.capital, 0);
+        rows.forEach(r => {
+            tblP += '<tr><td class="fw-600">'+r.emp+'</td><td>'+r.banco+'</td><td>'+r.nombre+'</td><td class="text-right text-mono'+(r.tasaHigh?' c-red':'')+'">'+r.tasaStr+'</td><td class="text-right text-mono'+(r.capital>=20000000?' fw-600':'')+'">'+fmt(r.capital)+'</td></tr>';
+        });
+        tblP += '<tr class="row-subtotal"><td colspan="4">Subtotal '+emp+'</td><td class="text-right text-mono c-amber">'+fmt(subTotal)+'</td></tr>';
+    });
+    if (filter === 'all') {
+        tblP += '<tr class="row-total"><td colspan="4">TOTAL CAPITAL PENDIENTE</td><td class="text-right text-mono c-red">'+fmt(totalCapital)+'</td></tr>';
+    }
+    tblP += '</tbody></table></div></div>';
+    document.getElementById('deuda-tabla-prestamos').innerHTML = tblP;
+
+    // Table: Cronograma
+    let tblC = '<div class="card"><div class="card-header"><h3>Cronograma de Vencimientos Anuales</h3><span class="card-badge">Capital + Intereses (USD)</span></div><div class="card-body no-pad"><table><thead><tr><th>Empresa</th><th class="text-right">2026</th><th class="text-right">2027</th><th class="text-right">2028</th><th class="text-right">2029</th><th class="text-right">2030</th><th class="text-right">2031</th><th class="text-right">2032</th><th class="text-right">Total</th></tr></thead><tbody>';
+    if (showLIAG) {
+        const d = deudaCrono.LIAG;
+        tblC += '<tr><td class="fw-600">LIAG</td>'+years.map(y => '<td class="text-right text-mono">'+(d[y]>0?fmt(d[y]):'—')+'</td>').join('')+'<td class="text-right text-mono fw-600">'+fmt(d.total)+'</td></tr>';
+    }
+    if (showNS) {
+        const d = deudaCrono.NS;
+        tblC += '<tr><td class="fw-600">NS</td>'+years.map(y => '<td class="text-right text-mono">'+fmt(d[y])+'</td>').join('')+'<td class="text-right text-mono fw-600">'+fmt(d.total)+'</td></tr>';
+    }
+    if (filter === 'all') {
+        tblC += '<tr class="row-total"><td>TOTAL</td>';
+        let grandTotal = 0;
+        years.forEach(y => {
+            const v = (showLIAG?deudaCrono.LIAG[y]:0) + (showNS?deudaCrono.NS[y]:0);
+            grandTotal += v;
+            tblC += '<td class="text-right text-mono">'+fmt(v)+'</td>';
+        });
+        tblC += '<td class="text-right text-mono c-red">'+fmt(grandTotal)+'</td></tr>';
+    }
+    tblC += '</tbody></table></div></div>';
+    document.getElementById('deuda-tabla-cronograma').innerHTML = tblC;
+
+    // Table: Rabo amort (only if NS is shown)
+    if (showNS) {
+        let tblR = '<div class="card"><div class="card-header"><h3>Reestructuracion Rabobank (NS)</h3><span class="card-badge">Tabla de Amortizacion</span></div><div class="card-body no-pad"><table><thead><tr><th>Fecha</th><th class="text-right">Saldo Inicial</th><th class="text-right">% Amort.</th><th class="text-right">Amortizacion</th><th class="text-right">Tasa</th><th class="text-right">Intereses</th><th class="text-right">Pago Total</th></tr></thead><tbody>';
+        let totAmort=0, totInt=0, totPago=0;
+        raboAmort.forEach(r => {
+            totAmort+=r.amort; totInt+=r.interes; totPago+=r.pagoTotal;
+            tblR += '<tr><td>'+r.fecha+'</td><td class="text-right text-mono">'+fmt(r.saldo)+'</td><td class="text-right text-mono">'+r.pctAmort+'</td><td class="text-right text-mono">'+(r.amort>0?fmt(r.amort):'—')+'</td><td class="text-right text-mono'+(r.tasaHigh?' c-amber':'')+'">'+r.tasa+'</td><td class="text-right text-mono">'+fmt(r.interes)+'</td><td class="text-right text-mono fw-600">'+fmt(r.pagoTotal)+'</td></tr>';
+        });
+        tblR += '<tr class="row-total"><td>TOTALES</td><td></td><td></td><td class="text-right text-mono">'+fmt(totAmort)+'</td><td></td><td class="text-right text-mono">'+fmt(totInt)+'</td><td class="text-right text-mono c-red">'+fmt(totPago)+'</td></tr>';
+        tblR += '</tbody></table></div></div>';
+        document.getElementById('deuda-tabla-rabo').innerHTML = tblR;
+    } else {
+        document.getElementById('deuda-tabla-rabo').innerHTML = '';
+    }
+}
+
+// Initial render
+renderDeuda('all');
+
+// ===== NERA: BANCO =====
+new Chart(document.getElementById('chartNeraBanco'), {
+    type: 'doughnut',
+    data: { labels: ['Santander 49,6%','Galicia 49,5%','Macro 0,9%'], datasets: [{ data: [1858566,1852098,33624], backgroundColor: ['#dc2626','#2563eb','#d97706'], borderWidth: 0 }] },
+    options: chartOpts('doughnut', { cutout: '65%' })
+});
+
+// ===== NERA DATA =====
+const neraData = [
+    {b:'Galicia',m:42421,v:'25/02/2026'},{b:'Galicia',m:43432,v:'04/05/2026'},{b:'Galicia',m:10000,v:'11/05/2026'},
+    {b:'Macro',m:33624,v:'09/06/2026'},{b:'Galicia',m:76211,v:'09/06/2026'},{b:'Galicia',m:45712,v:'01/07/2026'},
+    {b:'Galicia',m:103092,v:'13/07/2026'},{b:'Santander',m:1858566,v:'30/07/2026'},{b:'Galicia',m:26311,v:'07/08/2026'},
+    {b:'Galicia',m:25401,v:'26/08/2026'},{b:'Galicia',m:44962,v:'07/09/2026'},{b:'Galicia',m:49161,v:'10/09/2026'},
+    {b:'Galicia',m:39561,v:'14/09/2026'},{b:'Galicia',m:144261,v:'18/09/2026'},{b:'Galicia',m:69821,v:'21/09/2026'},
+    {b:'Galicia',m:13408,v:'22/09/2026'},{b:'Galicia',m:414052,v:'01/10/2026'},{b:'Galicia',m:17905,v:'07/10/2026'},
+    {b:'Galicia',m:144473,v:'15/10/2026'},{b:'Galicia',m:24560,v:'22/10/2026'},{b:'Galicia',m:43602,v:'23/10/2026'},
+    {b:'Galicia',m:118385,v:'17/12/2026'},{b:'Galicia',m:44399,v:'04/01/2027'},{b:'Galicia',m:23563,v:'14/01/2027'},
+    {b:'Galicia',m:287408,v:'14/01/2027'}
+];
+
+const neraBody = document.getElementById('neraTableBody');
+const today = new Date(2026, 1, 16);
+let neraTotal = 0;
+neraData.forEach(i => {
+    const p = i.v.split('/');
+    const d = new Date(+p[2], +p[1]-1, +p[0]);
+    const diff = Math.ceil((d - today) / 864e5);
+    let badge = diff < 0 ? '<span class="badge badge-red">Vencido</span>'
+        : diff <= 30 ? '<span class="badge badge-red">'+diff+' dias</span>'
+        : diff <= 90 ? '<span class="badge badge-amber">'+diff+' dias</span>'
+        : '<span class="badge badge-green">'+diff+' dias</span>';
+    neraTotal += i.m;
+    neraBody.innerHTML += '<tr><td>'+i.b+'</td><td class="text-right text-mono fw-600">'+i.m.toLocaleString('es-AR')+'</td><td>'+i.v+'</td><td>'+badge+'</td></tr>';
+});
+neraBody.innerHTML += '<tr class="row-total"><td>TOTAL</td><td class="text-right text-mono c-amber">'+neraTotal.toLocaleString('es-AR')+'</td><td></td><td></td></tr>';
+
+// NERA Monthly
+const nm = {};
+neraData.forEach(i => { const p = i.v.split('/'); const k = p[1]+'/'+p[2]; nm[k] = (nm[k]||0)+i.m; });
+const mn = {'02/2026':'Feb 26','05/2026':'May 26','06/2026':'Jun 26','07/2026':'Jul 26','08/2026':'Ago 26','09/2026':'Sep 26','10/2026':'Oct 26','12/2026':'Dic 26','01/2027':'Ene 27'};
+const sm = Object.keys(nm).sort((a,b) => { const [ma,ya]=a.split('/').map(Number); const [mb,yb]=b.split('/').map(Number); return (ya*100+ma)-(yb*100+mb); });
+
+new Chart(document.getElementById('chartNeraMensual'), {
+    type: 'bar',
+    data: { labels: sm.map(k => mn[k]||k), datasets: [{ data: sm.map(k => nm[k]), backgroundColor: '#d97706', borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => fmtUSD(ctx.raw) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v>=1e3?(v/1e3).toFixed(0)+'K':v }, grid: { color: '#f1f5f9' } } } }
+});
+
+// ===== PAGOS DATA (UPDATED) =====
+const pagosData = [
+    {f:'23/01/2025',d:'Pago parcial Intereses Rabobank Linea 8.7MM (1/2)',t:'Pago Intereses',b:'Rabobank',p:475000,i:0},
+    {f:'29/01/2025',d:'Completa pago Intereses Rabobank Linea 8.7MM (2/2)',t:'Pago Intereses',b:'Rabobank',p:260179,i:0},
+    {f:'07/03/2025',d:'Pago intereses Itau Nassau - 20 mill',t:'Pago Intereses',b:'Itau Nassau',p:819528,i:0},
+    {f:'15/05/2025',d:'CCL con fondos LIAG y Mutuo a NS',t:'Pago Capital',b:'Nueva Sur',p:2907000,i:0},
+    {f:'18/06/2025',d:'Toma Prestamo Comafi USD 3 MM tasa 8.70%',t:'Toma Deuda',b:'Comafi',p:0,i:3000000},
+    {f:'23/06/2025',d:'Toma Prestamo Macro USD 3 MM tasa 10%',t:'Toma Deuda',b:'Banco Macro',p:0,i:0},
+    {f:'25/06/2025',d:'Pago prestamo 5 mill Galicia',t:'Pago Capital',b:'Banco Galicia',p:5250411,i:0},
+    {f:'26/06/2025',d:'Pago prestamo Nacion vto 23/6',t:'Pago Capital',b:'Banco Nacion',p:575000,i:0},
+    {f:'08/08/2025',d:'Pago intereses Itau Nassau - 20 mill',t:'Pago Intereses',b:'Itau Nassau',p:692750,i:0},
+    {f:'21/08/2025',d:'Pago Capital Rabobank linea USD 10 mill',t:'Pago Capital',b:'Rabobank',p:1200000,i:0},
+    {f:'21/08/2025',d:'Pago Capital Rabobank linea USD 4.5 mill',t:'Pago Capital',b:'Rabobank',p:570000,i:0},
+    {f:'21/08/2025',d:'Pago Capital Rabobank linea USD 2 mill',t:'Pago Capital',b:'Rabobank',p:230000,i:0},
+    {f:'22/08/2025',d:'Pago Rabo linea 10 MM Intereses',t:'Pago Intereses',b:'Rabobank',p:673051,i:0},
+    {f:'22/08/2025',d:'Pago Rabo linea 4.5 MM Intereses',t:'Pago Intereses',b:'Rabobank',p:315393,i:0},
+    {f:'22/08/2025',d:'Pago Rabo linea 2 MM Intereses',t:'Pago Intereses',b:'Rabobank',p:129394,i:0},
+    {f:'05/09/2025',d:'Cancelacion Intereses Bco Macro USD 3M',t:'Pago Intereses',b:'Banco Macro',p:148376,i:0},
+    {f:'09/09/2025',d:'Cancelacion prestamo Bco Macro USD 3M',t:'Pago Capital',b:'Banco Macro',p:3000000,i:0},
+    {f:'10/11/2025',d:'Pago por cta y orden Glycinemax (VEP)',t:'Retencion Ganancias',b:'NS',p:4790659,i:0},
+    {f:'04/12/2025',d:'Cancelacion prestamo Rabobank USD 3.135.000',t:'Pago Capital',b:'Rabobank',p:3135000,i:0},
+    {f:'04/12/2025',d:'Cancelacion intereses Rabobank',t:'Pago Intereses',b:'Rabobank',p:84488,i:0},
+    {f:'04/02/2026',d:'Pago Intereses NS',t:'Pago Intereses',b:'Rabobank',p:611359,i:0},
+    {f:'05/02/2026',d:'Pago Intereses Itau',t:'Pago Intereses',b:'Itau Nassau',p:833111,i:0}
+];
+
+const pagosBody = document.getElementById('pagosTableBody');
+pagosData.forEach(item => {
+    const badges = {
+        'Pago Capital': '<span class="badge badge-red">Capital</span>',
+        'Pago Intereses': '<span class="badge badge-amber">Intereses</span>',
+        'Toma Deuda': '<span class="badge badge-green">Toma Deuda</span>',
+        'Retencion Ganancias': '<span class="badge badge-purple">Ret. Ganancias</span>'
+    };
+    pagosBody.innerHTML += '<tr><td>'+item.f+'</td><td>'+item.d+'</td><td>'+(badges[item.t]||item.t)+'</td><td>'+item.b+'</td><td class="text-right text-mono'+(item.p>0?' c-red fw-600':'')+'">'+(item.p>0?item.p.toLocaleString('es-AR'):'—')+'</td><td class="text-right text-mono'+(item.i>0?' c-green fw-600':'')+'">'+(item.i>0?item.i.toLocaleString('es-AR'):'—')+'</td></tr>';
+});
+
+// Pagos por tipo chart (UPDATED with Retencion Ganancias)
+new Chart(document.getElementById('chartPagosTipo'), {
+    type: 'doughnut',
+    data: { labels: ['Pago Capital','Pago Intereses','Retencion Ganancias','Toma Deuda (ingreso)'], datasets: [{ data: [16867411,5042629,4790659,3000000], backgroundColor: ['#dc2626','#d97706','#7c3aed','#059669'], borderWidth: 0 }] },
+    options: chartOpts('doughnut', { cutout: '65%' })
+});
+
+// Pagos por banco
+const pb = {};
+pagosData.forEach(item => { if (item.p > 0) pb[item.b] = (pb[item.b]||0) + item.p; });
+const bs = Object.entries(pb).sort((a,b) => b[1]-a[1]);
+
+new Chart(document.getElementById('chartPagosBanco'), {
+    type: 'bar',
+    data: { labels: bs.map(b => b[0]), datasets: [{ data: bs.map(b => b[1]), backgroundColor: palette, borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => fmtUSD(ctx.raw) } } }, scales: { x: { ticks: { callback: v => v>=1e6?(v/1e6).toFixed(1)+'M':v.toLocaleString() }, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } } }
+});
+
+// ===== LINEAS DE CREDITO =====
+const lineasData = [
+    {banco:'Galicia',tipo:'Linea de corto plazo',moneda:'ARS',total:23200000000,utilizado:10476050000,disponible:12723950000,pctUtil:'45,2%',vto:'31/12/2026',tasa:'7,5%',estado:'Activa',comment:''},
+    {banco:'Macro',tipo:'Linea de corto plazo',moneda:'USD',total:10000000,utilizado:3000000,disponible:7000000,pctUtil:'30,0%',vto:'31/03/2026',tasa:'8,0%',estado:'Prorroga',comment:'Trabajando en la renovacion'},
+    {banco:'Provincia',tipo:'Linea de corto plazo',moneda:'ARS',total:4400000000,utilizado:0,disponible:4400000000,pctUtil:'0,0%',vto:'31/12/2026',tasa:'45,0%',estado:'Activa',comment:''},
+    {banco:'Comafi',tipo:'Linea de corto plazo',moneda:'USD',total:3000000,utilizado:3000000,disponible:0,pctUtil:'100,0%',vto:'31/12/2025',tasa:'38,0%',estado:'Vencida',comment:'Trabajando en la renovacion'},
+    {banco:'Santander',tipo:'Linea de corto plazo',moneda:'USD',total:6000000,utilizado:1859000,disponible:0,pctUtil:'31,0%',vto:'31/12/2025',tasa:'9,0%',estado:'Vencida',comment:'Trabajando en la renovacion'}
+];
+
+const TC_LINEAS = 1425;
+
+// Table
+const lineasBody = document.getElementById('lineasTableBody');
+lineasData.forEach(l => {
+    const estadoBadge = l.estado === 'Activa' ? '<span class="badge badge-green">Activa</span>'
+        : l.estado === 'Vencida' ? '<span class="badge badge-red">Vencida</span>'
+        : '<span class="badge badge-amber">Prorroga</span>';
+    const monedaBadge = l.moneda === 'USD' ? '<span class="badge badge-green">USD</span>' : '<span class="badge badge-blue">ARS</span>';
+    const fmtMonto = (v, mon) => {
+        if (v === 0) return '—';
+        if (mon === 'USD') return fmt(v);
+        return fmt(v);
+    };
+    lineasBody.innerHTML += '<tr><td class="fw-600">'+l.banco+'</td><td>'+l.tipo+'</td><td>'+monedaBadge+'</td><td class="text-right text-mono">'+fmtMonto(l.total, l.moneda)+'</td><td class="text-right text-mono'+(l.utilizado > 0 ? ' c-red' : '')+'">'+fmtMonto(l.utilizado, l.moneda)+'</td><td class="text-right text-mono'+(l.disponible > 0 ? ' c-green' : '')+'">'+fmtMonto(l.disponible, l.moneda)+'</td><td class="text-right text-mono fw-600">'+l.pctUtil+'</td><td>'+l.vto+'</td><td class="text-right text-mono">'+l.tasa+'</td><td>'+estadoBadge+'</td><td style="white-space:normal;font-size:12px;color:var(--text-muted);">'+l.comment+'</td></tr>';
+});
+
+// Totals rows
+const totUSD = {total:19000000, utilizado:7859000, disponible:7000000};
+const totARS = {total:27600000000, utilizado:10476050000, disponible:17123950000};
+const totCombUSD = {total:38368421, utilizado:15210614, disponible:19016807};
+lineasBody.innerHTML += '<tr class="row-subtotal"><td colspan="3">Totales USD</td><td class="text-right text-mono">'+fmt(totUSD.total)+'</td><td class="text-right text-mono c-red">'+fmt(totUSD.utilizado)+'</td><td class="text-right text-mono c-green">'+fmt(totUSD.disponible)+'</td><td class="text-right text-mono">41,4%</td><td colspan="4"></td></tr>';
+lineasBody.innerHTML += '<tr class="row-subtotal"><td colspan="3">Totales ARS</td><td class="text-right text-mono">'+fmt(totARS.total)+'</td><td class="text-right text-mono c-red">'+fmt(totARS.utilizado)+'</td><td class="text-right text-mono c-green">'+fmt(totARS.disponible)+'</td><td class="text-right text-mono">38,0%</td><td colspan="4"></td></tr>';
+lineasBody.innerHTML += '<tr class="row-total"><td colspan="3">TOTAL (USD equiv.)</td><td class="text-right text-mono">'+fmt(totCombUSD.total)+'</td><td class="text-right text-mono c-red">'+fmt(totCombUSD.utilizado)+'</td><td class="text-right text-mono c-green">'+fmt(totCombUSD.disponible)+'</td><td class="text-right text-mono">39,6%</td><td colspan="4"></td></tr>';
+
+// Chart: Utilizacion por banco (stacked horizontal bar)
+const lineasUSDEquiv = lineasData.map(l => ({
+    banco: l.banco,
+    utilizado: l.moneda === 'USD' ? l.utilizado : Math.round(l.utilizado / TC_LINEAS),
+    disponible: l.moneda === 'USD' ? l.disponible : Math.round(l.disponible / TC_LINEAS)
+}));
+
+new Chart(document.getElementById('chartLineasUtil'), {
+    type: 'bar',
+    data: {
+        labels: lineasUSDEquiv.map(l => l.banco),
+        datasets: [
+            { label: 'Utilizado', data: lineasUSDEquiv.map(l => l.utilizado), backgroundColor: '#dc2626', borderRadius: 3 },
+            { label: 'Disponible', data: lineasUSDEquiv.map(l => l.disponible), backgroundColor: '#059669', borderRadius: 3 }
+        ]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { weight: '500' } } }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + fmtUSD(ctx.raw) } } },
+        scales: { x: { stacked: true, ticks: { callback: v => v >= 1e6 ? (v/1e6).toFixed(0)+'M' : v.toLocaleString() }, grid: { color: '#f1f5f9' } }, y: { stacked: true, grid: { display: false } } }
+    }
+});
+
+// Chart: Estado de lineas (doughnut)
+const activas = lineasData.filter(l => l.estado === 'Activa').length;
+const vencidas = lineasData.filter(l => l.estado === 'Vencida').length;
+const prorroga = lineasData.filter(l => l.estado === 'Prorroga').length;
+new Chart(document.getElementById('chartLineasEstado'), {
+    type: 'doughnut',
+    data: { labels: ['Activas ('+activas+')','Vencidas ('+vencidas+')','En Prorroga ('+prorroga+')'], datasets: [{ data: [activas, vencidas, prorroga], backgroundColor: ['#059669','#dc2626','#d97706'], borderWidth: 0 }] },
+    options: chartOpts('doughnut', { cutout: '65%', plugins: { tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.raw + ' lineas' } } } })
+});
+
+// Chart: Stacked bar total vs utilizado
+new Chart(document.getElementById('chartLineasStacked'), {
+    type: 'bar',
+    data: {
+        labels: lineasUSDEquiv.map(l => l.banco),
+        datasets: [
+            { label: 'Utilizado', data: lineasUSDEquiv.map(l => l.utilizado), backgroundColor: '#dc2626', borderRadius: 3 },
+            { label: 'Disponible', data: lineasUSDEquiv.map(l => l.disponible), backgroundColor: '#059669', borderRadius: 3 }
+        ]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { weight: '500' } } }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + fmtUSD(ctx.raw) } } },
+        scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => v >= 1e6 ? (v/1e6).toFixed(0)+'M' : v.toLocaleString() }, grid: { color: '#f1f5f9' } } }
+    }
+});
+</script>
+
+</body>
+</html>
