@@ -409,6 +409,12 @@
             letter-spacing: 0.2px;
         }
 
+        /* ===== TABLE WRAPPER (scroll horizontal mobile) ===== */
+        .table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1100px) {
             .kpi-row { grid-template-columns: repeat(2, 1fr); }
@@ -416,10 +422,79 @@
         }
 
         @media (max-width: 700px) {
-            .kpi-row { grid-template-columns: 1fr; }
+            /* Header */
+            .header {
+                padding: 12px 16px;
+                height: auto;
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            .header-meta {
+                width: 100%;
+                justify-content: space-between;
+                font-size: 12px;
+            }
+
+            /* Nav: horizontal scroll */
+            .nav {
+                padding: 0;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .nav::-webkit-scrollbar { display: none; }
+            .nav-tab {
+                padding: 12px 16px;
+                font-size: 12px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            /* Container */
             .container { padding: 16px; }
-            .header { padding: 0 16px; }
-            .nav { padding: 0 16px; }
+
+            /* KPIs */
+            .kpi-row { grid-template-columns: 1fr !important; gap: 12px; }
+            .kpi { padding: 16px; }
+            .kpi-value { font-size: 22px; }
+            .kpi-label { font-size: 10px; }
+
+            /* Section header */
+            .section-header h2 { font-size: 18px; }
+
+            /* Cards */
+            .card-header { padding: 12px 16px; }
+            .card-header h3 { font-size: 13px; }
+            .card-body { padding: 12px 16px; }
+            .card-body.no-pad { padding: 0; }
+
+            /* Charts */
+            .chart-container { height: 240px; }
+
+            /* Grid */
+            .grid-2 { grid-template-columns: 1fr; gap: 12px; }
+
+            /* Tables */
+            thead th { padding: 8px 12px; font-size: 10px; }
+            tbody td { padding: 8px 12px; font-size: 12px; }
+
+            /* Filter group */
+            .filter-group { flex-wrap: wrap; }
+            .filter-btn { padding: 6px 14px; font-size: 12px; }
+
+            /* Deuda section header stacking */
+            .section-header[style] {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .kpi-value { font-size: 19px; }
+            .header-brand h1 { font-size: 14px; }
+            .nav-tab { padding: 10px 12px; font-size: 11px; }
         }
 
         @media print {
@@ -574,7 +649,7 @@
 
     <div class="card">
         <div class="card-header"><h3>Cuentas Bancarias y Comitentes</h3></div>
-        <div class="card-body no-pad">
+        <div class="card-body no-pad"><div class="table-wrap">
             <table>
                 <thead><tr><th>Cuenta</th><th>Entidad</th><th>Moneda</th><th class="text-right">Saldo ARS</th><th class="text-right">Saldo USD</th></tr></thead>
                 <tbody>
@@ -586,12 +661,12 @@
                     <tr class="row-subtotal"><td colspan="3">Subtotal Bancos & Comitentes</td><td class="text-right text-mono">1.679.590.000</td><td class="text-right text-mono c-blue">1.178.660</td></tr>
                 </tbody>
             </table>
-        </div>
+        </div></div>
     </div>
 
     <div class="card">
         <div class="card-header"><h3>Inversiones de Corto Plazo</h3><span class="card-badge">FCI + LECAPs</span></div>
-        <div class="card-body no-pad">
+        <div class="card-body no-pad"><div class="table-wrap">
             <table>
                 <thead><tr><th>Instrumento</th><th>Entidad</th><th class="text-right">Saldo ARS</th><th class="text-right">Saldo USD</th></tr></thead>
                 <tbody>
@@ -605,12 +680,12 @@
                     <tr class="row-subtotal"><td colspan="2">Subtotal Inversiones CP</td><td class="text-right text-mono">7.946.358.993</td><td class="text-right text-mono c-purple">5.576.392</td></tr>
                 </tbody>
             </table>
-        </div>
+        </div></div>
     </div>
 
     <div class="card">
         <div class="card-header"><h3>Cheques a Cobrar</h3></div>
-        <div class="card-body no-pad">
+        <div class="card-body no-pad"><div class="table-wrap">
             <table>
                 <thead><tr><th>Concepto</th><th>Plazo</th><th class="text-right">Saldo ARS</th><th class="text-right">Saldo USD</th></tr></thead>
                 <tbody>
@@ -621,7 +696,7 @@
                     <tr class="row-subtotal"><td colspan="2">Subtotal Cheques</td><td class="text-right text-mono">1.941.166.384</td><td class="text-right text-mono c-amber">1.362.222</td></tr>
                 </tbody>
             </table>
-        </div>
+        </div></div>
     </div>
 
 </div>
@@ -697,12 +772,12 @@
 
     <div class="card">
         <div class="card-header"><h3>Detalle de Obligaciones</h3><span class="card-badge">Ordenado por vencimiento</span></div>
-        <div class="card-body no-pad">
+        <div class="card-body no-pad"><div class="table-wrap">
             <table>
                 <thead><tr><th>Banco</th><th class="text-right">Monto USD</th><th>Vencimiento</th><th>Estado</th></tr></thead>
                 <tbody id="neraTableBody"></tbody>
             </table>
-        </div>
+        </div></div>
     </div>
 
 </div>
@@ -753,12 +828,12 @@
 
     <div class="card">
         <div class="card-header"><h3>Detalle de Movimientos</h3><span class="card-badge">Orden cronologico</span></div>
-        <div class="card-body no-pad">
+        <div class="card-body no-pad"><div class="table-wrap">
             <table>
                 <thead><tr><th>Fecha</th><th>Descripcion</th><th>Tipo</th><th>Banco</th><th class="text-right">Pago USD</th><th class="text-right">Ingreso USD</th></tr></thead>
                 <tbody id="pagosTableBody"></tbody>
             </table>
-        </div>
+        </div></div>
     </div>
 
 </div>
@@ -809,12 +884,12 @@
 
     <div class="card">
         <div class="card-header"><h3>Detalle de Lineas de Credito</h3><span class="card-badge">Todas las lineas</span></div>
-        <div class="card-body no-pad">
+        <div class="card-body no-pad"><div class="table-wrap">
             <table>
                 <thead><tr><th>Banco</th><th>Tipo</th><th>Moneda</th><th class="text-right">Monto Total</th><th class="text-right">Utilizado</th><th class="text-right">Disponible</th><th class="text-right">% Util.</th><th>Vencimiento</th><th class="text-right">Tasa</th><th>Estado</th><th>Comentarios</th></tr></thead>
                 <tbody id="lineasTableBody"></tbody>
             </table>
-        </div>
+        </div></div>
     </div>
 
     <div class="card">
@@ -849,12 +924,13 @@ Chart.defaults.font.size = 12;
 
 const fmtUSD = (v) => 'USD ' + v.toLocaleString('es-AR');
 const palette = ['#2563eb','#059669','#d97706','#dc2626','#7c3aed','#06b6d4','#64748b','#be185d'];
+const isMobile = window.innerWidth <= 700;
 
 function chartOpts(type, extra = {}) {
     return {
         responsive: true, maintainAspectRatio: false,
         plugins: {
-            legend: { position: 'right', labels: { padding: 14, usePointStyle: true, pointStyle: 'circle', font: { size: 12, weight: '500' } } },
+            legend: { position: isMobile ? 'bottom' : 'right', labels: { padding: isMobile ? 10 : 14, usePointStyle: true, pointStyle: 'circle', font: { size: isMobile ? 11 : 12, weight: '500' } } },
             tooltip: { backgroundColor: '#0f172a', titleFont: { size: 12, weight: '600' }, bodyFont: { size: 12 }, padding: 10, cornerRadius: 6, callbacks: { label: (ctx) => ' ' + ctx.label + ': ' + fmtUSD(ctx.raw) } },
             ...extra.plugins
         },
@@ -1005,7 +1081,7 @@ function renderDeuda(filter) {
     });
 
     // Table: Prestamos
-    let tblP = '<div class="card"><div class="card-header"><h3>Resumen de Prestamos</h3><span class="card-badge">Capital Pendiente</span></div><div class="card-body no-pad"><table><thead><tr><th>Empresa</th><th>Banco</th><th>Prestamo</th><th class="text-right">Tasa</th><th class="text-right">Capital USD</th></tr></thead><tbody>';
+    let tblP = '<div class="card"><div class="card-header"><h3>Resumen de Prestamos</h3><span class="card-badge">Capital Pendiente</span></div><div class="card-body no-pad"><div class="table-wrap"><table><thead><tr><th>Empresa</th><th>Banco</th><th>Prestamo</th><th class="text-right">Tasa</th><th class="text-right">Capital USD</th></tr></thead><tbody>';
     const empresas = [...new Set(filtered.map(p => p.emp))];
     empresas.forEach(emp => {
         const rows = filtered.filter(p => p.emp === emp);
@@ -1018,11 +1094,11 @@ function renderDeuda(filter) {
     if (filter === 'all') {
         tblP += '<tr class="row-total"><td colspan="4">TOTAL CAPITAL PENDIENTE</td><td class="text-right text-mono c-red">'+fmt(totalCapital)+'</td></tr>';
     }
-    tblP += '</tbody></table></div></div>';
+    tblP += '</tbody></table></div></div></div>';
     document.getElementById('deuda-tabla-prestamos').innerHTML = tblP;
 
     // Table: Cronograma
-    let tblC = '<div class="card"><div class="card-header"><h3>Cronograma de Vencimientos Anuales</h3><span class="card-badge">Capital + Intereses (USD)</span></div><div class="card-body no-pad"><table><thead><tr><th>Empresa</th><th class="text-right">2026</th><th class="text-right">2027</th><th class="text-right">2028</th><th class="text-right">2029</th><th class="text-right">2030</th><th class="text-right">2031</th><th class="text-right">2032</th><th class="text-right">Total</th></tr></thead><tbody>';
+    let tblC = '<div class="card"><div class="card-header"><h3>Cronograma de Vencimientos Anuales</h3><span class="card-badge">Capital + Intereses (USD)</span></div><div class="card-body no-pad"><div class="table-wrap"><table><thead><tr><th>Empresa</th><th class="text-right">2026</th><th class="text-right">2027</th><th class="text-right">2028</th><th class="text-right">2029</th><th class="text-right">2030</th><th class="text-right">2031</th><th class="text-right">2032</th><th class="text-right">Total</th></tr></thead><tbody>';
     if (showLIAG) {
         const d = deudaCrono.LIAG;
         tblC += '<tr><td class="fw-600">LIAG</td>'+years.map(y => '<td class="text-right text-mono">'+(d[y]>0?fmt(d[y]):'—')+'</td>').join('')+'<td class="text-right text-mono fw-600">'+fmt(d.total)+'</td></tr>';
@@ -1041,19 +1117,19 @@ function renderDeuda(filter) {
         });
         tblC += '<td class="text-right text-mono c-red">'+fmt(grandTotal)+'</td></tr>';
     }
-    tblC += '</tbody></table></div></div>';
+    tblC += '</tbody></table></div></div></div>';
     document.getElementById('deuda-tabla-cronograma').innerHTML = tblC;
 
     // Table: Rabo amort (only if NS is shown)
     if (showNS) {
-        let tblR = '<div class="card"><div class="card-header"><h3>Reestructuracion Rabobank (NS)</h3><span class="card-badge">Tabla de Amortizacion</span></div><div class="card-body no-pad"><table><thead><tr><th>Fecha</th><th class="text-right">Saldo Inicial</th><th class="text-right">% Amort.</th><th class="text-right">Amortizacion</th><th class="text-right">Tasa</th><th class="text-right">Intereses</th><th class="text-right">Pago Total</th></tr></thead><tbody>';
+        let tblR = '<div class="card"><div class="card-header"><h3>Reestructuracion Rabobank (NS)</h3><span class="card-badge">Tabla de Amortizacion</span></div><div class="card-body no-pad"><div class="table-wrap"><table><thead><tr><th>Fecha</th><th class="text-right">Saldo Inicial</th><th class="text-right">% Amort.</th><th class="text-right">Amortizacion</th><th class="text-right">Tasa</th><th class="text-right">Intereses</th><th class="text-right">Pago Total</th></tr></thead><tbody>';
         let totAmort=0, totInt=0, totPago=0;
         raboAmort.forEach(r => {
             totAmort+=r.amort; totInt+=r.interes; totPago+=r.pagoTotal;
             tblR += '<tr><td>'+r.fecha+'</td><td class="text-right text-mono">'+fmt(r.saldo)+'</td><td class="text-right text-mono">'+r.pctAmort+'</td><td class="text-right text-mono">'+(r.amort>0?fmt(r.amort):'—')+'</td><td class="text-right text-mono'+(r.tasaHigh?' c-amber':'')+'">'+r.tasa+'</td><td class="text-right text-mono">'+fmt(r.interes)+'</td><td class="text-right text-mono fw-600">'+fmt(r.pagoTotal)+'</td></tr>';
         });
         tblR += '<tr class="row-total"><td>TOTALES</td><td></td><td></td><td class="text-right text-mono">'+fmt(totAmort)+'</td><td></td><td class="text-right text-mono">'+fmt(totInt)+'</td><td class="text-right text-mono c-red">'+fmt(totPago)+'</td></tr>';
-        tblR += '</tbody></table></div></div>';
+        tblR += '</tbody></table></div></div></div>';
         document.getElementById('deuda-tabla-rabo').innerHTML = tblR;
     } else {
         document.getElementById('deuda-tabla-rabo').innerHTML = '';
