@@ -803,23 +803,23 @@
     <div class="kpi-row" style="margin-bottom:24px;">
         <div class="kpi kpi-blue">
             <div class="kpi-label">Total Pagado</div>
-            <div class="kpi-value v-blue">USD 13.265.205</div>
+            <div class="kpi-value v-blue">USD 16.686.861</div>
             <div class="kpi-sub">Ago 2025 &mdash; Feb 2026</div>
         </div>
         <div class="kpi kpi-red">
             <div class="kpi-label">Capital Pagado</div>
-            <div class="kpi-value v-red">USD 5.135.000</div>
-            <div class="kpi-sub">Rabobank LIAG</div>
+            <div class="kpi-value v-red">USD 8.135.000</div>
+            <div class="kpi-sub">Rabobank LIAG + Macro LIAG</div>
         </div>
         <div class="kpi kpi-amber">
             <div class="kpi-label">Intereses Pagados</div>
-            <div class="kpi-value v-amber">USD 3.339.546</div>
-            <div class="kpi-sub">Itaú + Rabobank</div>
+            <div class="kpi-value v-amber">USD 3.487.922</div>
+            <div class="kpi-sub">Itaú + Rabobank + Macro</div>
         </div>
         <div class="kpi kpi-purple">
             <div class="kpi-label">Ret. Ganancias / Otros</div>
-            <div class="kpi-value v-purple">USD 4.790.659</div>
-            <div class="kpi-sub">VEP Glycinemax (NS)</div>
+            <div class="kpi-value v-purple">USD 5.063.939</div>
+            <div class="kpi-sub">VEP Glycinemax + Rubicon</div>
         </div>
     </div>
 
@@ -828,7 +828,7 @@
     <div class="kpi-row" style="margin-bottom:24px;">
         <div class="kpi kpi-green">
             <div class="kpi-label">Total Pr&oacute;ximo</div>
-            <div class="kpi-value v-green">USD 14.535.940</div>
+            <div class="kpi-value v-green">USD 11.062.661</div>
             <div class="kpi-sub">Mar &mdash; Jun 2026</div>
         </div>
         <div class="kpi kpi-red">
@@ -843,7 +843,7 @@
         </div>
         <div class="kpi kpi-blue">
             <div class="kpi-label">Inv. / Fees / Otros</div>
-            <div class="kpi-value v-blue">USD 7.979.946</div>
+            <div class="kpi-value v-blue">USD 4.079.666</div>
             <div class="kpi-sub">Rubicon + Campos Sur + Fees Rabo</div>
         </div>
     </div>
@@ -859,10 +859,10 @@
                 <table>
                     <thead><tr><th>Origen</th><th class="text-right">Intereses</th><th class="text-right">Capital</th><th class="text-right">Otros</th><th class="text-right">Subtotal</th><th class="text-right">%</th></tr></thead>
                     <tbody>
-                        <tr><td class="fw-600">NS</td><td class="text-right text-mono">1.825.861</td><td class="text-right text-mono">3.000.000</td><td class="text-right text-mono">5.397.325</td><td class="text-right text-mono fw-600">10.223.186</td><td class="text-right text-mono">32,7%</td></tr>
-                        <tr><td class="fw-600">LIAG</td><td class="text-right text-mono">2.218.056</td><td class="text-right text-mono">11.135.000</td><td class="text-right text-mono">—</td><td class="text-right text-mono fw-600">13.353.056</td><td class="text-right text-mono">42,8%</td></tr>
-                        <tr><td class="fw-600">Inversi&oacute;n</td><td class="text-right text-mono">—</td><td class="text-right text-mono">—</td><td class="text-right text-mono">7.646.559</td><td class="text-right text-mono fw-600">7.646.560</td><td class="text-right text-mono">24,5%</td></tr>
-                        <tr class="row-total"><td>TOTAL</td><td class="text-right text-mono c-amber">4.043.917</td><td class="text-right text-mono c-red">14.135.000</td><td class="text-right text-mono c-blue">13.043.884</td><td class="text-right text-mono c-blue">31.222.801</td><td class="text-right text-mono">100%</td></tr>
+                        <tr><td class="fw-600">NS</td><td class="text-right text-mono">1.825.861</td><td class="text-right text-mono">3.000.000</td><td class="text-right text-mono">5.397.325</td><td class="text-right text-mono fw-600">10.223.186</td><td class="text-right text-mono">36,8%</td></tr>
+                        <tr><td class="fw-600">LIAG</td><td class="text-right text-mono">2.366.432</td><td class="text-right text-mono">14.135.000</td><td class="text-right text-mono">—</td><td class="text-right text-mono fw-600">16.501.432</td><td class="text-right text-mono">59,3%</td></tr>
+                        <tr><td class="fw-600">Inversi&oacute;n</td><td class="text-right text-mono">—</td><td class="text-right text-mono">—</td><td class="text-right text-mono">1.025.000</td><td class="text-right text-mono fw-600">1.025.000</td><td class="text-right text-mono">3,9%</td></tr>
+                        <tr class="row-total"><td>TOTAL</td><td class="text-right text-mono c-amber">4.192.293</td><td class="text-right text-mono c-red">17.135.000</td><td class="text-right text-mono c-blue">6.422.325</td><td class="text-right text-mono c-blue">27.749.618</td><td class="text-right text-mono">100%</td></tr>
                     </tbody>
                 </table>
             </div></div>
@@ -1324,6 +1324,8 @@ const pagadoData = [
     {f:'21/08/2025',banco:'Rabobank',origen:'LIAG',capitalIni:9000000,interes:673051,capitalPago:1200000,otros:0,comment:'Orígen 15,025,000'},
     {f:'21/08/2025',banco:'Rabobank',origen:'LIAG',capitalIni:4275000,interes:315393,capitalPago:570000,otros:0,comment:'Orígen 15,025,000'},
     {f:'05/09/2025',banco:'Rabobank',origen:'LIAG',capitalIni:1750000,interes:129394,capitalPago:230000,otros:0,comment:'Orígen 15,025,000'},
+    {f:'05/09/2025',banco:'Macro',origen:'LIAG',capitalIni:3000000,interes:148376,capitalPago:3000000,otros:0,comment:''},
+    {f:'17/09/2025',banco:'Rubicon',origen:'Inversión',capitalIni:0,interes:0,capitalPago:0,otros:273280,comment:''},
     {f:'10/11/2025',banco:'VEP Glycinemax',origen:'NS',capitalIni:0,interes:0,capitalPago:0,otros:4790659,comment:'Ret. Ganancias'},
     {f:'04/12/2025',banco:'Rabobank',origen:'LIAG',capitalIni:4275000,interes:84488,capitalPago:3135000,otros:0,comment:'Pre-cancel. escisión'},
     {f:'04/02/2026',banco:'Rabobank',origen:'LIAG',capitalIni:91000000,interes:611359,capitalPago:0,otros:0,comment:'IB 3,5M; LIAG completó'},
@@ -1359,9 +1361,9 @@ pagadoData.forEach(item => {
 // Fila total pagado
 pagadoBody.innerHTML += `<tr class="row-total">
     <td colspan="4">TOTAL YA PAGADO</td>
-    <td class="text-right text-mono c-amber">3.339.546</td>
-    <td class="text-right text-mono c-red">5.135.000</td>
-    <td class="text-right text-mono c-purple">4.790.659</td>
+    <td class="text-right text-mono c-amber">3.487.922</td>
+    <td class="text-right text-mono c-red">8.135.000</td>
+    <td class="text-right text-mono c-purple">5.063.939</td>
     <td></td>
 </tr>`;
 
