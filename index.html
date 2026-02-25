@@ -526,6 +526,7 @@
     <button class="nav-tab" onclick="showSection('nera',this)">NERA</button>
     <button class="nav-tab" onclick="showSection('pagos',this)">Pagos de Deuda</button>
     <button class="nav-tab" onclick="showSection('lineas',this)">Lineas de Credito</button>
+    <button class="nav-tab" onclick="showSection('insumos',this)">Deuda Comercial</button>
 </div>
 
 <div class="container">
@@ -559,9 +560,9 @@
     </div>
     <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr); margin-top: -12px;">
         <div class="kpi kpi-blue">
-            <div class="kpi-label">Servicio de Deuda (Ene25-Feb26)</div>
-            <div class="kpi-value v-blue">USD 26.700.699</div>
-            <div class="kpi-sub">Capital: USD 16,9 M &middot; Intereses: USD 5,0 M</div>
+            <div class="kpi-label">Servicio de Deuda (Campana 25/26)</div>
+            <div class="kpi-value v-blue">USD 27.801.145</div>
+            <div class="kpi-sub">Pagado: USD 13,3 M &middot; Prox Jun'26: USD 14,5 M</div>
         </div>
         <div class="kpi kpi-purple">
             <div class="kpi-label">Lineas de Credito Disponibles</div>
@@ -789,49 +790,104 @@
 
     <div class="section-header">
         <h2>Pagos de Deuda</h2>
-        <p>Flujos de prestamos — Enero 2025 a Febrero 2026</p>
+        <p>Egresos Caja LIAG &mdash; Campa&ntilde;a 2025/2026</p>
     </div>
 
-    <div class="kpi-row">
+    <!-- KPIs Ya Pagado -->
+    <div style="margin-bottom:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-label);padding-left:2px;">&#10003; Ya Efectuado (ago&rsquo;25 &mdash; feb&rsquo;26)</div>
+    <div class="kpi-row" style="margin-bottom:24px;">
         <div class="kpi kpi-blue">
-            <div class="kpi-label">Servicio de Deuda Total</div>
-            <div class="kpi-value v-blue">USD 26.700.699</div>
-            <div class="kpi-sub">Total egresos del periodo</div>
+            <div class="kpi-label">Total Pagado</div>
+            <div class="kpi-value v-blue">USD 13.265.205</div>
+            <div class="kpi-sub">Ago 2025 &mdash; Feb 2026</div>
         </div>
         <div class="kpi kpi-red">
-            <div class="kpi-label">Pago de Capital</div>
-            <div class="kpi-value v-red">USD 16.867.411</div>
-            <div class="kpi-sub">63,2% del total</div>
+            <div class="kpi-label">Capital Pagado</div>
+            <div class="kpi-value v-red">USD 5.135.000</div>
+            <div class="kpi-sub">Rabobank LIAG</div>
         </div>
         <div class="kpi kpi-amber">
-            <div class="kpi-label">Pago de Intereses</div>
-            <div class="kpi-value v-amber">USD 5.042.629</div>
-            <div class="kpi-sub">18,9% del total</div>
+            <div class="kpi-label">Intereses Pagados</div>
+            <div class="kpi-value v-amber">USD 3.339.546</div>
+            <div class="kpi-sub">Itaú + Rabobank</div>
         </div>
         <div class="kpi kpi-purple">
-            <div class="kpi-label">Retencion Ganancias</div>
+            <div class="kpi-label">Ret. Ganancias / Otros</div>
             <div class="kpi-value v-purple">USD 4.790.659</div>
-            <div class="kpi-sub">Glycinemax (VEP)</div>
+            <div class="kpi-sub">VEP Glycinemax (NS)</div>
+        </div>
+    </div>
+
+    <!-- KPIs Próximos -->
+    <div style="margin-bottom:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-label);padding-left:2px;">&#9654; Pr&oacute;ximos hasta Jun &rsquo;26</div>
+    <div class="kpi-row" style="margin-bottom:24px;">
+        <div class="kpi kpi-green">
+            <div class="kpi-label">Total Pr&oacute;ximo</div>
+            <div class="kpi-value v-green">USD 14.535.940</div>
+            <div class="kpi-sub">Mar &mdash; Jun 2026</div>
+        </div>
+        <div class="kpi kpi-red">
+            <div class="kpi-label">Capital a Pagar</div>
+            <div class="kpi-value v-red">USD 6.000.000</div>
+            <div class="kpi-sub">Macro NS + Comafi LIAG</div>
+        </div>
+        <div class="kpi kpi-amber">
+            <div class="kpi-label">Intereses a Pagar</div>
+            <div class="kpi-value v-amber">USD 555.995</div>
+            <div class="kpi-sub">Macro + Comafi</div>
+        </div>
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Inv. / Fees / Otros</div>
+            <div class="kpi-value v-blue">USD 7.979.946</div>
+            <div class="kpi-sub">Rubicon + Campos Sur + Fees Rabo</div>
         </div>
     </div>
 
     <div class="grid-2">
         <div class="card">
-            <div class="card-header"><h3>Descomposicion de Pagos</h3><span class="card-badge">USD</span></div>
+            <div class="card-header"><h3>Composici&oacute;n Total Egresos</h3><span class="card-badge">USD</span></div>
             <div class="card-body"><div class="chart-container"><canvas id="chartPagosTipo"></canvas></div></div>
         </div>
         <div class="card">
-            <div class="card-header"><h3>Pagos por Banco</h3><span class="card-badge">USD</span></div>
-            <div class="card-body"><div class="chart-container"><canvas id="chartPagosBanco"></canvas></div></div>
+            <div class="card-header"><h3>Resumen por Origen</h3><span class="card-badge">Campa&ntilde;a 25/26</span></div>
+            <div class="card-body no-pad"><div class="table-wrap">
+                <table>
+                    <thead><tr><th>Origen</th><th class="text-right">Intereses</th><th class="text-right">Capital</th><th class="text-right">Otros</th><th class="text-right">Subtotal</th><th class="text-right">%</th></tr></thead>
+                    <tbody>
+                        <tr><td class="fw-600">NS</td><td class="text-right text-mono">1.825.861</td><td class="text-right text-mono">3.000.000</td><td class="text-right text-mono">5.397.325</td><td class="text-right text-mono fw-600">10.223.186</td><td class="text-right text-mono">32,7%</td></tr>
+                        <tr><td class="fw-600">LIAG</td><td class="text-right text-mono">2.218.056</td><td class="text-right text-mono">11.135.000</td><td class="text-right text-mono">—</td><td class="text-right text-mono fw-600">13.353.056</td><td class="text-right text-mono">42,8%</td></tr>
+                        <tr><td class="fw-600">Inversi&oacute;n</td><td class="text-right text-mono">—</td><td class="text-right text-mono">—</td><td class="text-right text-mono">7.646.559</td><td class="text-right text-mono fw-600">7.646.560</td><td class="text-right text-mono">24,5%</td></tr>
+                        <tr class="row-total"><td>TOTAL</td><td class="text-right text-mono c-amber">4.043.917</td><td class="text-right text-mono c-red">14.135.000</td><td class="text-right text-mono c-blue">13.043.884</td><td class="text-right text-mono c-blue">31.222.801</td><td class="text-right text-mono">100%</td></tr>
+                    </tbody>
+                </table>
+            </div></div>
         </div>
     </div>
 
+    <!-- Tabla Ya Pagado -->
     <div class="card">
-        <div class="card-header"><h3>Detalle de Movimientos</h3><span class="card-badge">Orden cronologico</span></div>
+        <div class="card-header" style="background:var(--green-50);">
+            <h3 style="color:var(--green-600);">&#10003; Ya Efectuado &mdash; Ago 2025 a Feb 2026</h3>
+            <span class="card-badge">8 movimientos</span>
+        </div>
         <div class="card-body no-pad"><div class="table-wrap">
             <table>
-                <thead><tr><th>Fecha</th><th>Descripcion</th><th>Tipo</th><th>Banco</th><th class="text-right">Pago USD</th><th class="text-right">Ingreso USD</th></tr></thead>
-                <tbody id="pagosTableBody"></tbody>
+                <thead><tr><th>Fecha</th><th>Banco</th><th>Origen</th><th class="text-right">Capital Ini.</th><th class="text-right">Inter&eacute;s Pago</th><th class="text-right">Capital Pago</th><th class="text-right">Otros</th><th>Comentarios</th></tr></thead>
+                <tbody id="pagadoTableBody"></tbody>
+            </table>
+        </div></div>
+    </div>
+
+    <!-- Tabla Próximos -->
+    <div class="card">
+        <div class="card-header" style="background:var(--amber-50);">
+            <h3 style="color:var(--amber-600);">&#9654; Pr&oacute;ximos hasta Jun &rsquo;26</h3>
+            <span class="card-badge">6 movimientos</span>
+        </div>
+        <div class="card-body no-pad"><div class="table-wrap">
+            <table>
+                <thead><tr><th>Fecha</th><th>Banco</th><th>Origen</th><th class="text-right">Inter&eacute;s</th><th class="text-right">Capital</th><th class="text-right">Otros</th><th>Comentarios</th></tr></thead>
+                <tbody id="proximosTableBody"></tbody>
             </table>
         </div></div>
     </div>
@@ -901,8 +957,76 @@
 
 </div>
 
+<!-- ========================================== -->
+<!-- DEUDA COMERCIAL (INSUMOS)                  -->
+<!-- ========================================== -->
+<div id="section-insumos" class="section">
+
+    <div class="section-header">
+        <h2>Deuda Comercial &mdash; Insumos</h2>
+        <p>Insumos facturados en USD &mdash; Campa&ntilde;a 2025/2026 &middot; Fuente: Cash Flow LIAG</p>
+    </div>
+
+    <div class="kpi-row">
+        <div class="kpi kpi-red">
+            <div class="kpi-label">Total Insumos Facturados</div>
+            <div class="kpi-value v-red">USD 10.963.924</div>
+            <div class="kpi-sub">7 categor&iacute;as de agroquímicos y semillas</div>
+        </div>
+        <div class="kpi kpi-amber">
+            <div class="kpi-label">Mayor Mes</div>
+            <div class="kpi-value v-amber">Abr &rsquo;26</div>
+            <div class="kpi-sub">USD 2.795.397 &mdash; 25,5% del total</div>
+        </div>
+        <div class="kpi kpi-blue">
+            <div class="kpi-label">Mayor Categor&iacute;a</div>
+            <div class="kpi-value v-blue">Fertilizantes</div>
+            <div class="kpi-sub">USD 4.659.795 &mdash; 42,5% del total</div>
+        </div>
+        <div class="kpi kpi-green">
+            <div class="kpi-label">Per&iacute;odo Principal</div>
+            <div class="kpi-value v-green">Mar&mdash;Jul &rsquo;26</div>
+            <div class="kpi-sub">93,3% de los egresos</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header"><h3>Egresos Mensuales por Insumos</h3><span class="card-badge">USD</span></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartInsumosMensual"></canvas></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3>Composici&oacute;n por Categor&iacute;a</h3><span class="card-badge">USD</span></div>
+            <div class="card-body"><div class="chart-container"><canvas id="chartInsumosCateg"></canvas></div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Detalle por Categor&iacute;a y Mes</h3><span class="card-badge">Insumos USD</span></div>
+        <div class="card-body no-pad"><div class="table-wrap">
+            <table>
+                <thead><tr>
+                    <th>Categor&iacute;a</th>
+                    <th class="text-right">Mar&rsquo;26</th>
+                    <th class="text-right">Abr&rsquo;26</th>
+                    <th class="text-right">May&rsquo;26</th>
+                    <th class="text-right">Jun&rsquo;26</th>
+                    <th class="text-right">Jul&rsquo;26</th>
+                    <th class="text-right">Ago&rsquo;26</th>
+                    <th class="text-right">Sep&rsquo;26</th>
+                    <th class="text-right">Oct&rsquo;26</th>
+                    <th class="text-right">Nov&rsquo;26</th>
+                    <th class="text-right fw-600">TOTAL</th>
+                </tr></thead>
+                <tbody id="insumosTableBody"></tbody>
+            </table>
+        </div></div>
+    </div>
+
+</div>
+
 <div class="footer">
-    LIAG Argentina S.A.U. &mdash; Dashboard Financiero &middot; Datos al 23/02/2026 &middot; Actualizacion semanal
+    LIAG Argentina S.A.U. &mdash; Dashboard Financiero &middot; Datos al 25/02/2026 &middot; Actualizacion semanal
 </div>
 
 </div>
@@ -1188,59 +1312,81 @@ new Chart(document.getElementById('chartNeraMensual'), {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => fmtUSD(ctx.raw) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v>=1e3?(v/1e3).toFixed(0)+'K':v }, grid: { color: '#f1f5f9' } } } }
 });
 
-// ===== PAGOS DATA (UPDATED) =====
-const pagosData = [
-    {f:'23/01/2025',d:'Pago parcial Intereses Rabobank Linea 8.7MM (1/2)',t:'Pago Intereses',b:'Rabobank',p:475000,i:0},
-    {f:'29/01/2025',d:'Completa pago Intereses Rabobank Linea 8.7MM (2/2)',t:'Pago Intereses',b:'Rabobank',p:260179,i:0},
-    {f:'07/03/2025',d:'Pago intereses Itau Nassau - 20 mill',t:'Pago Intereses',b:'Itau Nassau',p:819528,i:0},
-    {f:'15/05/2025',d:'CCL con fondos LIAG y Mutuo a NS',t:'Pago Capital',b:'Nueva Sur',p:2907000,i:0},
-    {f:'18/06/2025',d:'Toma Prestamo Comafi USD 3 MM tasa 8.70%',t:'Toma Deuda',b:'Comafi',p:0,i:3000000},
-    {f:'23/06/2025',d:'Toma Prestamo Macro USD 3 MM tasa 10%',t:'Toma Deuda',b:'Banco Macro',p:0,i:0},
-    {f:'25/06/2025',d:'Pago prestamo 5 mill Galicia',t:'Pago Capital',b:'Banco Galicia',p:5250411,i:0},
-    {f:'26/06/2025',d:'Pago prestamo Nacion vto 23/6',t:'Pago Capital',b:'Banco Nacion',p:575000,i:0},
-    {f:'08/08/2025',d:'Pago intereses Itau Nassau - 20 mill',t:'Pago Intereses',b:'Itau Nassau',p:692750,i:0},
-    {f:'21/08/2025',d:'Pago Capital Rabobank linea USD 10 mill',t:'Pago Capital',b:'Rabobank',p:1200000,i:0},
-    {f:'21/08/2025',d:'Pago Capital Rabobank linea USD 4.5 mill',t:'Pago Capital',b:'Rabobank',p:570000,i:0},
-    {f:'21/08/2025',d:'Pago Capital Rabobank linea USD 2 mill',t:'Pago Capital',b:'Rabobank',p:230000,i:0},
-    {f:'22/08/2025',d:'Pago Rabo linea 10 MM Intereses',t:'Pago Intereses',b:'Rabobank',p:673051,i:0},
-    {f:'22/08/2025',d:'Pago Rabo linea 4.5 MM Intereses',t:'Pago Intereses',b:'Rabobank',p:315393,i:0},
-    {f:'22/08/2025',d:'Pago Rabo linea 2 MM Intereses',t:'Pago Intereses',b:'Rabobank',p:129394,i:0},
-    {f:'05/09/2025',d:'Cancelacion Intereses Bco Macro USD 3M',t:'Pago Intereses',b:'Banco Macro',p:148376,i:0},
-    {f:'09/09/2025',d:'Cancelacion prestamo Bco Macro USD 3M',t:'Pago Capital',b:'Banco Macro',p:3000000,i:0},
-    {f:'10/11/2025',d:'Pago por cta y orden Glycinemax (VEP)',t:'Retencion Ganancias',b:'NS',p:4790659,i:0},
-    {f:'04/12/2025',d:'Cancelacion prestamo Rabobank USD 3.135.000',t:'Pago Capital',b:'Rabobank',p:3135000,i:0},
-    {f:'04/12/2025',d:'Cancelacion intereses Rabobank',t:'Pago Intereses',b:'Rabobank',p:84488,i:0},
-    {f:'04/02/2026',d:'Pago Intereses NS',t:'Pago Intereses',b:'Rabobank',p:611359,i:0},
-    {f:'05/02/2026',d:'Pago Intereses Itau',t:'Pago Intereses',b:'Itau Nassau',p:833111,i:0}
+// ===== PAGOS DE DEUDA (UPDATED - Campaña 2025/2026) =====
+
+const pagadoData = [
+    {f:'08/08/2025',banco:'Itaú',origen:'NS',capitalIni:20000000,interes:692750,capitalPago:0,otros:0,comment:''},
+    {f:'21/08/2025',banco:'Rabobank',origen:'LIAG',capitalIni:9000000,interes:673051,capitalPago:1200000,otros:0,comment:'Orígen 15,025,000'},
+    {f:'21/08/2025',banco:'Rabobank',origen:'LIAG',capitalIni:4275000,interes:315393,capitalPago:570000,otros:0,comment:'Orígen 15,025,000'},
+    {f:'05/09/2025',banco:'Rabobank',origen:'LIAG',capitalIni:1750000,interes:129394,capitalPago:230000,otros:0,comment:'Orígen 15,025,000'},
+    {f:'10/11/2025',banco:'VEP Glycinemax',origen:'NS',capitalIni:0,interes:0,capitalPago:0,otros:4790659,comment:'Ret. Ganancias'},
+    {f:'04/12/2025',banco:'Rabobank',origen:'LIAG',capitalIni:4275000,interes:84488,capitalPago:3135000,otros:0,comment:'Pre-cancel. escisión'},
+    {f:'04/02/2026',banco:'Rabobank',origen:'LIAG',capitalIni:91000000,interes:611359,capitalPago:0,otros:0,comment:'IB 3,5M; LIAG completó'},
+    {f:'05/02/2026',banco:'Itaú',origen:'NS',capitalIni:20000000,interes:833111,capitalPago:0,otros:0,comment:''},
 ];
 
-const pagosBody = document.getElementById('pagosTableBody');
-pagosData.forEach(item => {
-    const badges = {
-        'Pago Capital': '<span class="badge badge-red">Capital</span>',
-        'Pago Intereses': '<span class="badge badge-amber">Intereses</span>',
-        'Toma Deuda': '<span class="badge badge-green">Toma Deuda</span>',
-        'Retencion Ganancias': '<span class="badge badge-purple">Ret. Ganancias</span>'
-    };
-    pagosBody.innerHTML += '<tr><td>'+item.f+'</td><td>'+item.d+'</td><td>'+(badges[item.t]||item.t)+'</td><td>'+item.b+'</td><td class="text-right text-mono'+(item.p>0?' c-red fw-600':'')+'">'+(item.p>0?item.p.toLocaleString('es-AR'):'—')+'</td><td class="text-right text-mono'+(item.i>0?' c-green fw-600':'')+'">'+(item.i>0?item.i.toLocaleString('es-AR'):'—')+'</td></tr>';
-});
+const proximosData = [
+    {f:'15/03/2026',banco:'Rubicon',origen:'Inversión',interes:0,capitalPago:0,otros:273280,comment:''},
+    {f:'15/03/2026',banco:'Rabobank',origen:'NS',interes:0,capitalPago:0,otros:303333,comment:'Fees Restructuración'},
+    {f:'15/03/2026',banco:'Campos Sur',origen:'Inversión',interes:0,capitalPago:0,otros:7100000,comment:''},
+    {f:'15/06/2026',banco:'Rabobank',origen:'NS',interes:0,capitalPago:0,otros:303333,comment:'Fees Restructuración'},
+    {f:'15/06/2026',banco:'Macro',origen:'NS',interes:300000,capitalPago:3000000,otros:0,comment:''},
+    {f:'15/06/2026',banco:'Comafi',origen:'LIAG',interes:255995,capitalPago:3000000,otros:0,comment:''},
+];
 
-// Pagos por tipo chart (UPDATED with Retencion Ganancias)
+const fmt2 = v => v > 0 ? v.toLocaleString('es-AR') : '—';
+
+// Tabla pagado
+const pagadoBody = document.getElementById('pagadoTableBody');
+pagadoData.forEach(item => {
+    const origenBadge = item.origen === 'LIAG' ? '<span class="badge badge-blue">LIAG</span>' : item.origen === 'NS' ? '<span class="badge badge-amber">NS</span>' : '<span class="badge badge-green">'+item.origen+'</span>';
+    pagadoBody.innerHTML += `<tr>
+        <td>${item.f}</td>
+        <td class="fw-600">${item.banco}</td>
+        <td>${origenBadge}</td>
+        <td class="text-right text-mono">${fmt2(item.capitalIni)}</td>
+        <td class="text-right text-mono${item.interes>0?' c-amber':''}">${fmt2(item.interes)}</td>
+        <td class="text-right text-mono${item.capitalPago>0?' c-red fw-600':''}">${fmt2(item.capitalPago)}</td>
+        <td class="text-right text-mono${item.otros>0?' c-purple fw-600':''}">${fmt2(item.otros)}</td>
+        <td style="font-size:12px;color:var(--text-muted);white-space:normal;">${item.comment}</td>
+    </tr>`;
+});
+// Fila total pagado
+pagadoBody.innerHTML += `<tr class="row-total">
+    <td colspan="4">TOTAL YA PAGADO</td>
+    <td class="text-right text-mono c-amber">3.339.546</td>
+    <td class="text-right text-mono c-red">5.135.000</td>
+    <td class="text-right text-mono c-purple">4.790.659</td>
+    <td></td>
+</tr>`;
+
+// Tabla proximos
+const proximosBody = document.getElementById('proximosTableBody');
+proximosData.forEach(item => {
+    const origenBadge = item.origen === 'LIAG' ? '<span class="badge badge-blue">LIAG</span>' : item.origen === 'NS' ? '<span class="badge badge-amber">NS</span>' : '<span class="badge badge-purple">'+item.origen+'</span>';
+    proximosBody.innerHTML += `<tr>
+        <td>${item.f}</td>
+        <td class="fw-600">${item.banco}</td>
+        <td>${origenBadge}</td>
+        <td class="text-right text-mono${item.interes>0?' c-amber':''}">${fmt2(item.interes)}</td>
+        <td class="text-right text-mono${item.capitalPago>0?' c-red fw-600':''}">${fmt2(item.capitalPago)}</td>
+        <td class="text-right text-mono${item.otros>0?' c-blue fw-600':''}">${fmt2(item.otros)}</td>
+        <td style="font-size:12px;color:var(--text-muted);white-space:normal;">${item.comment}</td>
+    </tr>`;
+});
+proximosBody.innerHTML += `<tr class="row-total">
+    <td colspan="3">TOTAL PRÓXIMOS hasta Jun'26</td>
+    <td class="text-right text-mono c-amber">555.995</td>
+    <td class="text-right text-mono c-red">6.000.000</td>
+    <td class="text-right text-mono c-blue">7.979.946</td>
+    <td></td>
+</tr>`;
+
+// Chart composición total egresos
 new Chart(document.getElementById('chartPagosTipo'), {
     type: 'doughnut',
-    data: { labels: ['Pago Capital','Pago Intereses','Retencion Ganancias','Toma Deuda (ingreso)'], datasets: [{ data: [16867411,5042629,4790659,3000000], backgroundColor: ['#dc2626','#d97706','#7c3aed','#059669'], borderWidth: 0 }] },
+    data: { labels: ['Capital','Intereses','Ret. Ganancias / Otros'], datasets: [{ data: [14135000, 4043917, 13043884], backgroundColor: ['#dc2626','#d97706','#7c3aed'], borderWidth: 0 }] },
     options: chartOpts('doughnut', { cutout: '65%' })
-});
-
-// Pagos por banco
-const pb = {};
-pagosData.forEach(item => { if (item.p > 0) pb[item.b] = (pb[item.b]||0) + item.p; });
-const bs = Object.entries(pb).sort((a,b) => b[1]-a[1]);
-
-new Chart(document.getElementById('chartPagosBanco'), {
-    type: 'bar',
-    data: { labels: bs.map(b => b[0]), datasets: [{ data: bs.map(b => b[1]), backgroundColor: palette, borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => fmtUSD(ctx.raw) } } }, scales: { x: { ticks: { callback: v => v>=1e6?(v/1e6).toFixed(1)+'M':v.toLocaleString() }, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } } }
 });
 
 // ===== LINEAS DE CREDITO =====
@@ -1310,22 +1456,58 @@ new Chart(document.getElementById('chartLineasEstado'), {
     options: chartOpts('doughnut', { cutout: '65%', plugins: { tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.raw + ' lineas' } } } })
 });
 
-// Chart: Stacked bar total vs utilizado
-new Chart(document.getElementById('chartLineasStacked'), {
+// ===== DEUDA COMERCIAL INSUMOS =====
+const insumosData = [
+    {categ:'Fertilizantes', meses:[1353919,2488650,182357,0,266371,123760,200452,44286,0], total:4659795},
+    {categ:'Herbicidas',    meses:[334228,163251,204521,738922,942777,1092682,96382,59002,0], total:3631766},
+    {categ:'Insecticidas',  meses:[772,15998,1442,496980,53252,31809,47568,0,0], total:647821},
+    {categ:'Fungicidas',    meses:[8168,0,66762,37686,34118,12531,84889,0,30598], total:274752},
+    {categ:'Coadyuvantes',  meses:[27842,82028,131350,0,34530,0,0,0,0], total:275750},
+    {categ:'Otros Agroquím.',meses:[7846,0,0,8996,108271,8228,154401,33275,354], total:321370},
+    {categ:'Semillas',      meses:[0,45469,450664,241747,414790,0,0,0,0], total:1152670},
+];
+const insumosMeses = ["Mar'26","Abr'26","May'26","Jun'26","Jul'26","Ago'26","Sep'26","Oct'26","Nov'26"];
+const insumosMensuales = [1732775,2795397,1037097,1524331,1854109,1269009,583691,136563,30952];
+
+// Chart: egresos mensuales
+new Chart(document.getElementById('chartInsumosMensual'), {
     type: 'bar',
     data: {
-        labels: lineasUSDEquiv.map(l => l.banco),
-        datasets: [
-            { label: 'Utilizado', data: lineasUSDEquiv.map(l => l.utilizado), backgroundColor: '#dc2626', borderRadius: 3 },
-            { label: 'Disponible', data: lineasUSDEquiv.map(l => l.disponible), backgroundColor: '#059669', borderRadius: 3 }
-        ]
+        labels: insumosMeses,
+        datasets: [{ data: insumosMensuales, backgroundColor: palette, borderRadius: 4 }]
     },
     options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { weight: '500' } } }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + fmtUSD(ctx.raw) } } },
-        scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => v >= 1e6 ? (v/1e6).toFixed(0)+'M' : v.toLocaleString() }, grid: { color: '#f1f5f9' } } }
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 6, callbacks: { label: ctx => fmtUSD(ctx.raw) } } },
+        scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v }, grid: { color: '#f1f5f9' } } }
     }
 });
+
+// Chart: por categoría
+new Chart(document.getElementById('chartInsumosCateg'), {
+    type: 'doughnut',
+    data: {
+        labels: insumosData.map(d => d.categ),
+        datasets: [{ data: insumosData.map(d => d.total), backgroundColor: palette, borderWidth: 0 }]
+    },
+    options: chartOpts('doughnut', { cutout: '60%' })
+});
+
+// Tabla detalle
+const insumosBody = document.getElementById('insumosTableBody');
+insumosData.forEach(row => {
+    insumosBody.innerHTML += `<tr>
+        <td class="fw-600">${row.categ}</td>
+        ${row.meses.map(v => `<td class="text-right text-mono">${v > 0 ? v.toLocaleString('es-AR') : '—'}</td>`).join('')}
+        <td class="text-right text-mono fw-600 c-red">${row.total.toLocaleString('es-AR')}</td>
+    </tr>`;
+});
+insumosBody.innerHTML += `<tr class="row-total">
+    <td>TOTAL</td>
+    ${insumosMensuales.map(v => `<td class="text-right text-mono c-red">${v.toLocaleString('es-AR')}</td>`).join('')}
+    <td class="text-right text-mono c-red fw-600">10.963.924</td>
+</tr>`;
+
 </script>
 
 </body>
