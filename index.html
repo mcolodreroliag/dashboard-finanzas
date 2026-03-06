@@ -554,8 +554,8 @@
         </div>
         <div class="kpi kpi-amber">
             <div class="kpi-label">Deuda Plataforma NERA</div>
-            <div class="kpi-value v-amber">USD 3.822.429</div>
-            <div class="kpi-sub">28 obligaciones &middot; Prox vto: 04/May</div>
+            <div class="kpi-value v-amber">USD 3.780.011</div>
+            <div class="kpi-sub">27 obligaciones &middot; Prox vto: 04/May</div>
         </div>
     </div>
     <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr); margin-top: -12px;">
@@ -745,18 +745,18 @@
     <div class="kpi-row">
         <div class="kpi kpi-amber">
             <div class="kpi-label">Total Deuda NERA</div>
-            <div class="kpi-value v-amber">USD 3.822.429</div>
-            <div class="kpi-sub">28 obligaciones activas</div>
+            <div class="kpi-value v-amber">USD 3.780.011</div>
+            <div class="kpi-sub">27 obligaciones activas</div>
         </div>
         <div class="kpi kpi-blue">
             <div class="kpi-label">Santander</div>
             <div class="kpi-value v-blue">USD 1.858.566</div>
-            <div class="kpi-sub">48,6% del total</div>
+            <div class="kpi-sub">49,2% del total</div>
         </div>
         <div class="kpi kpi-blue">
             <div class="kpi-label">Galicia</div>
-            <div class="kpi-value v-blue">USD 1.930.239</div>
-            <div class="kpi-sub">50,5% del total</div>
+            <div class="kpi-value v-blue">USD 1.887.821</div>
+            <div class="kpi-sub">49,9% del total</div>
         </div>
         <div class="kpi kpi-red">
             <div class="kpi-label">Proximo Vencimiento</div>
@@ -1122,14 +1122,40 @@ const deudaCrono = {
     NS:   {2026:5637450,2027:17153500,2028:20898150,2029:19997250,2030:23277800,2031:21585200,2032:19892600,total:128441950}
 };
 
-const raboAmort = [
-    {fecha:'15/10/2026',saldo:91000000,pctAmort:'0,0%',amort:0,tasa:'8,85%',tasaHigh:false,interes:5659821,pagoTotal:5659821},
-    {fecha:'15/10/2027',saldo:91000000,pctAmort:'10,0%',amort:9100000,tasa:'8,85%',tasaHigh:false,interes:8053500,pagoTotal:17153500},
-    {fecha:'15/10/2028',saldo:81900000,pctAmort:'15,0%',amort:13650000,tasa:'8,85%',tasaHigh:false,interes:7248150,pagoTotal:20898150},
-    {fecha:'15/10/2029',saldo:68250000,pctAmort:'15,0%',amort:13650000,tasa:'9,30%',tasaHigh:true,interes:6347250,pagoTotal:19997250},
-    {fecha:'15/10/2030',saldo:54600000,pctAmort:'20,0%',amort:18200000,tasa:'9,30%',tasaHigh:true,interes:5077800,pagoTotal:23277800},
-    {fecha:'15/10/2031',saldo:36400000,pctAmort:'20,0%',amort:18200000,tasa:'9,30%',tasaHigh:true,interes:3385200,pagoTotal:21585200},
-    {fecha:'15/10/2032',saldo:18200000,pctAmort:'20,0%',amort:18200000,tasa:'9,30%',tasaHigh:true,interes:1692600,pagoTotal:19892600}
+const proxPagos = [
+    {f:'11/04/2026',emp:'LIAG',banco:'BaPro',   prestamo:'Bapro 0%',              cap:51585,    interes:0,         total:51585},
+    {f:'16/04/2026',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:15873,     total:61348},
+    {f:'11/05/2026',emp:'LIAG',banco:'John Deere',prestamo:'Prendario JD 0%',      cap:68175,    interes:0,         total:68175},
+    {f:'27/05/2026',emp:'LIAG',banco:'Galicia',  prestamo:'Prefi 11,5%',           cap:5035500,  interes:380767,    total:5416267},
+    {f:'11/06/2026',emp:'LIAG',banco:'Comafi',   prestamo:'Comafi 8,7%',           cap:3000000,  interes:255995,    total:3255995},
+    {f:'23/06/2026',emp:'LIAG',banco:'Macro',    prestamo:'Macro 10%',             cap:3000000,  interes:300000,    total:3300000},
+    {f:'06/08/2026',emp:'LIAG',banco:'Itaú',     prestamo:'Itaú 8,15%',            cap:6666667,  interes:819528,    total:7486195},
+    {f:'31/08/2026',emp:'LIAG',banco:'Rabobank', prestamo:'SBLC',                  cap:0,        interes:73786,     total:73786},
+    {f:'11/10/2026',emp:'LIAG',banco:'BaPro',    prestamo:'Bapro 0%',              cap:51585,    interes:0,         total:51585},
+    {f:'15/10/2026',emp:'NS',  banco:'Rabobank', prestamo:'Rabo 8,85%',            cap:0,        interes:5637450,   total:5637450},
+    {f:'16/10/2026',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:13965,     total:59440},
+    {f:'10/11/2026',emp:'LIAG',banco:'John Deere',prestamo:'Prendario JD 0%',      cap:68175,    interes:0,         total:68175},
+    {f:'06/02/2027',emp:'LIAG',banco:'Itaú',     prestamo:'Itaú 8,15%',            cap:6666667,  interes:561444,    total:7228111},
+    {f:'11/04/2027',emp:'LIAG',banco:'BaPro',    prestamo:'Bapro 0%',              cap:51585,    interes:0,         total:51585},
+    {f:'16/04/2027',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:11904,     total:57379},
+    {f:'10/05/2027',emp:'LIAG',banco:'John Deere',prestamo:'Prendario JD 0%',      cap:68175,    interes:0,         total:68175},
+    {f:'06/08/2027',emp:'LIAG',banco:'Itaú',     prestamo:'Itaú 8,15%',            cap:6666667,  interes:270157,    total:6936824},
+    {f:'11/10/2027',emp:'LIAG',banco:'BaPro',    prestamo:'Bapro 0%',              cap:51585,    interes:0,         total:51585},
+    {f:'15/10/2027',emp:'NS',  banco:'Rabobank', prestamo:'Rabo 8,85%',            cap:9100000,  interes:8053500,   total:17153500},
+    {f:'18/10/2027',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:10084,     total:55559},
+    {f:'10/11/2027',emp:'LIAG',banco:'John Deere',prestamo:'Prendario JD 0%',      cap:68175,    interes:0,         total:68175},
+    {f:'11/04/2028',emp:'LIAG',banco:'BaPro',    prestamo:'Bapro 0%',              cap:51585,    interes:0,         total:51585},
+    {f:'17/04/2028',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:7936,      total:53411},
+    {f:'11/10/2028',emp:'LIAG',banco:'BaPro',    prestamo:'Bapro 0%',              cap:51585,    interes:0,         total:51585},
+    {f:'15/10/2028',emp:'NS',  banco:'Rabobank', prestamo:'Rabo 8,85%',            cap:13650000, interes:7248150,   total:20898150},
+    {f:'16/10/2028',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:5952,      total:51427},
+    {f:'11/04/2029',emp:'LIAG',banco:'BaPro',    prestamo:'Bapro 0%',              cap:51585,    interes:0,         total:51585},
+    {f:'16/04/2029',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:3968,      total:49443},
+    {f:'15/10/2029',emp:'NS',  banco:'Rabobank', prestamo:'Rabo 8,85%',            cap:13650000, interes:6347250,   total:19997250},
+    {f:'16/10/2029',emp:'LIAG',banco:'Galicia',  prestamo:'Prendario 8,75%',       cap:45475,    interes:1995,      total:47470},
+    {f:'15/10/2030',emp:'NS',  banco:'Rabobank', prestamo:'Rabo 8,85%',            cap:18200000, interes:5077800,   total:23277800},
+    {f:'15/10/2031',emp:'NS',  banco:'Rabobank', prestamo:'Rabo 8,85%',            cap:18200000, interes:3385200,   total:21585200},
+    {f:'15/10/2032',emp:'NS',  banco:'Rabobank', prestamo:'Rabo 8,85%',            cap:18200000, interes:1692600,   total:19892600},
 ];
 
 let chartDeudaBanco = null;
@@ -1249,20 +1275,21 @@ function renderDeuda(filter) {
     tblC += '</tbody></table></div></div></div>';
     document.getElementById('deuda-tabla-cronograma').innerHTML = tblC;
 
-    // Table: Rabo amort (only if NS is shown)
-    if (showNS) {
-        let tblR = '<div class="card"><div class="card-header"><h3>Reestructuracion Rabobank (NS)</h3><span class="card-badge">Tabla de Amortizacion</span></div><div class="card-body no-pad"><div class="table-wrap"><table><thead><tr><th>Fecha</th><th class="text-right">Saldo Inicial</th><th class="text-right">% Amort.</th><th class="text-right">Amortizacion</th><th class="text-right">Tasa</th><th class="text-right">Intereses</th><th class="text-right">Pago Total</th></tr></thead><tbody>';
-        let totAmort=0, totInt=0, totPago=0;
-        raboAmort.forEach(r => {
-            totAmort+=r.amort; totInt+=r.interes; totPago+=r.pagoTotal;
-            tblR += '<tr><td>'+r.fecha+'</td><td class="text-right text-mono">'+fmt(r.saldo)+'</td><td class="text-right text-mono">'+r.pctAmort+'</td><td class="text-right text-mono">'+(r.amort>0?fmt(r.amort):'—')+'</td><td class="text-right text-mono'+(r.tasaHigh?' c-amber':'')+'">'+r.tasa+'</td><td class="text-right text-mono">'+fmt(r.interes)+'</td><td class="text-right text-mono fw-600">'+fmt(r.pagoTotal)+'</td></tr>';
-        });
-        tblR += '<tr class="row-total"><td>TOTALES</td><td></td><td></td><td class="text-right text-mono">'+fmt(totAmort)+'</td><td></td><td class="text-right text-mono">'+fmt(totInt)+'</td><td class="text-right text-mono c-red">'+fmt(totPago)+'</td></tr>';
-        tblR += '</tbody></table></div></div></div>';
-        document.getElementById('deuda-tabla-rabo').innerHTML = tblR;
-    } else {
-        document.getElementById('deuda-tabla-rabo').innerHTML = '';
-    }
+    // Table: Cronograma de próximos pagos (filtrado por empresa)
+    const pagosFiltrados = proxPagos.filter(p => {
+        if (filter === 'all') return true;
+        return p.emp === filter;
+    });
+    let totCap=0, totInt=0, totTotal=0;
+    let tblR = '<div class="card"><div class="card-header"><h3>Cronograma de Pr\u00f3ximos Pagos</h3><span class="card-badge">Capital + Intereses \u00b7 Pendiente de Pago</span></div><div class="card-body no-pad"><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Empresa</th><th>Banco</th><th>Pr\u00e9stamo</th><th class="text-right">Capital</th><th class="text-right">Inter\u00e9s</th><th class="text-right fw-600">Total</th></tr></thead><tbody>';
+    pagosFiltrados.forEach(r => {
+        totCap+=r.cap; totInt+=r.interes; totTotal+=r.total;
+        const empBadge = r.emp==='LIAG' ? '<span class="badge badge-blue">LIAG</span>' : '<span class="badge badge-amber">NS</span>';
+        tblR += '<tr><td>'+r.f+'</td><td>'+empBadge+'</td><td class="fw-600">'+r.banco+'</td><td>'+r.prestamo+'</td><td class="text-right text-mono">'+(r.cap>0?fmt(r.cap):'—')+'</td><td class="text-right text-mono c-amber">'+(r.interes>0?fmt(r.interes):'—')+'</td><td class="text-right text-mono fw-600 c-red">'+fmt(r.total)+'</td></tr>';
+    });
+    tblR += '<tr class="row-total"><td colspan="4">TOTAL</td><td class="text-right text-mono">'+fmt(totCap)+'</td><td class="text-right text-mono c-amber">'+fmt(totInt)+'</td><td class="text-right text-mono c-red">'+fmt(totTotal)+'</td></tr>';
+    tblR += '</tbody></table></div></div></div>';
+    document.getElementById('deuda-tabla-rabo').innerHTML = tblR;
 }
 
 // Initial render
@@ -1271,13 +1298,13 @@ renderDeuda('all');
 // ===== NERA: BANCO =====
 new Chart(document.getElementById('chartNeraBanco'), {
     type: 'doughnut',
-    data: { labels: ['Galicia 50,5%','Santander 48,6%','Macro 0,9%'], datasets: [{ data: [1930239,1858566,33624], backgroundColor: ['#2563eb','#dc2626','#d97706'], borderWidth: 0 }] },
+    data: { labels: ['Galicia 49,9%','Santander 49,2%','Macro 0,9%'], datasets: [{ data: [1887821,1858566,33624], backgroundColor: ['#2563eb','#dc2626','#d97706'], borderWidth: 0 }] },
     options: chartOpts('doughnut', { cutout: '65%' })
 });
 
 // ===== NERA DATA =====
 const neraData = [
-    {b:'Galicia',m:42421,v:'25/02/2026'},{b:'Galicia',m:43432,v:'04/05/2026'},{b:'Galicia',m:10000,v:'11/05/2026'},
+    {b:'Galicia',m:43432,v:'04/05/2026'},{b:'Galicia',m:10000,v:'11/05/2026'},
     {b:'Macro',m:33624,v:'09/06/2026'},{b:'Galicia',m:76211,v:'09/06/2026'},{b:'Galicia',m:45712,v:'01/07/2026'},
     {b:'Galicia',m:103092,v:'13/07/2026'},{b:'Santander',m:1858566,v:'30/07/2026'},{b:'Galicia',m:26311,v:'07/08/2026'},
     {b:'Galicia',m:15440,v:'18/08/2026'},{b:'Galicia',m:25401,v:'26/08/2026'},{b:'Galicia',m:44962,v:'07/09/2026'},
