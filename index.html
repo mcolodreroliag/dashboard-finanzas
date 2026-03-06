@@ -527,6 +527,7 @@
     <button class="nav-tab" onclick="showSection('pagos',this)">Pagos de Deuda</button>
     <button class="nav-tab" onclick="showSection('lineas',this)">Lineas de Credito</button>
     <button class="nav-tab" onclick="showSection('insumos',this)">Deuda Comercial</button>
+    <button class="nav-tab" onclick="showSection('cashflow',this)">Cash Flow</button>
 </div>
 
 <div class="container">
@@ -1542,6 +1543,320 @@ insumosBody.innerHTML += `<tr class="row-total">
     <td class="text-right text-mono c-red fw-600">10.963.924</td>
 </tr>`;
 
+</script>
+
+<!-- ===== CASH FLOW ===== -->
+<div id="section-cashflow" class="section">
+
+    <div class="section-header">
+        <h2>Cash Flow Proyectado</h2>
+        <p>LIAG Argentina &mdash; Campa&ntilde;a 2025/2026&mdash;2027 &middot; Mar 2026 a Jun 2027</p>
+    </div>
+
+    <!-- Scenario toggle -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <span style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-label);">Escenario:</span>
+        <button class="filter-btn active" id="btnBase" onclick="setCFScenario('base',this)">Base</button>
+        <button class="filter-btn" id="btnAlt" onclick="setCFScenario('alt',this)">Alternativo (+ ventas adicionales)</button>
+        <span style="margin-left:auto;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-label);">Vista:</span>
+        <button class="filter-btn active" id="btnMensual" onclick="setCFView('mensual',this)">Mensual</button>
+        <button class="filter-btn" id="btnAcum" onclick="setCFView('acumulado',this)">Acumulado</button>
+    </div>
+
+    <!-- KPIs -->
+    <div id="cf-kpis"></div>
+
+    <!-- Charts row 1 -->
+    <div class="grid-2" style="margin-bottom:24px;">
+        <div class="card" style="margin-bottom:0;">
+            <div class="card-header"><h3>Caja Final &amp; Caja + Stock</h3><span class="card-badge" id="cfChartBadge">Mensual USD</span></div>
+            <div class="card-body"><div class="chart-container" style="height:260px;"><canvas id="chartCFEvol"></canvas></div></div>
+        </div>
+        <div class="card" style="margin-bottom:0;">
+            <div class="card-header"><h3>Free Cash Flow Mensual</h3><span class="card-badge">Positivo / Negativo</span></div>
+            <div class="card-body"><div class="chart-container" style="height:260px;"><canvas id="chartFCF"></canvas></div></div>
+        </div>
+    </div>
+
+    <!-- Charts row 2 -->
+    <div class="card" style="margin-bottom:24px;">
+        <div class="card-header"><h3>Ingresos vs Egresos Mensuales</h3><span class="card-badge">USD por componente</span></div>
+        <div class="card-body"><div class="chart-container" style="height:280px;"><canvas id="chartCFStack"></canvas></div></div>
+    </div>
+
+    <!-- Full table with toggleable sections -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Detalle Mensual</h3>
+            <span class="card-badge">Mar'26 &mdash; Jun'27</span>
+        </div>
+        <div class="card-body no-pad">
+            <div class="table-wrap" id="cfTableWrap"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ===== CASH FLOW =====
+const cfMonths = ['Mar-26','Abr-26','May-26','Jun-26','Jul-26','Ago-26','Sep-26','Oct-26','Nov-26','Dic-26','Ene-27','Feb-27','Mar-27','Abr-27','May-27','Jun-27'];
+
+const cfBase = {
+    caja_inicio:    [7000000,5144543,-1307567,-980229,-11783463,-17733884,-28193459,-30886841,-38645421,-41818433,-43782356,-47256468,-56209018,-59732824,-66055326,-71533739],
+    soja:           [3607130,1259080,10831346,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    maiz:           [2390788,910000,208800,1180260,180000,320789,43591,0,0,0,0,0,0,0,0,0],
+    trigo_pan:      [0,0,0,0,0,0,0,0,39710,0,0,0,0,0,0,0],
+    trigo_candeal:  [0,1337124,931827,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    garbanzo:       [104134,424261,0,244397,0,0,0,0,0,0,0,0,0,0,0,0],
+    ganaderia:      [0,400000,500000,489799,0,0,0,0,0,0,0,0,0,0,0,0],
+    camelina:       [161920,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    girasol:        [0,0,95750,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    total_ing:      [6263972,4330465,12567723,1914456,180000,320789,43591,0,39710,0,0,0,0,0,0,0],
+    costos_var:     [-1340973,-3392168,-4541170,-1721934,-790610,-4235,0,0,0,0,0,0,0,0,0,0],
+    costos_var_prox:[0,-50290,-143696,-1333565,-609265,-498457,-558653,-358717,-2120474,-796270,-2249674,-696819,-1340973,-3392168,-4541170,-1721934],
+    insumos:        [-1732775,-2795397,-1037097,-1524331,-1854109,-1269009,-583691,-136563,-30952,0,0,0,0,0,0,0],
+    nera:           [0,0,-53432,-109835,-2007370,-67152,-361174,-644291,-63001,-118385,-355369,0,0,0,0,0],
+    estructura:     [-869068,-930120,-940568,-1110320,-869068,-869068,-930120,-869068,-930120,-1049268,-869068,-869068,-869068,-930120,-869068,-1110320],
+    total_eg_op:    [-3942816,-7167975,-6715963,-5799983,-6130421,-2707922,-2433639,-2008640,-3144547,-1963923,-3474112,-1565887,-2210041,-4322288,-5410238,-2832253],
+    cf_op:          [2321156,-2837511,5851760,-3885527,-5950421,-2387133,-2390048,-2008640,-3104837,-1963923,-3474112,-1565887,-2210041,-4322288,-5410238,-2832253],
+    cf_op_acum:     [2321156,-516355,5335405,1449877,-4500544,-6887677,-9277725,-11286365,-14391202,-16355126,-19829238,-21395125,-23605166,-27927454,-33337692,-36169946],
+    capex_inv:      [-273280,0,0,0,0,-273280,0,0,0,0,0,0,0,0,0,0],
+    compra_campos:  [-3600000,-3500000,0,0,0,0,0,0,0,0,0,-1313764,-1890000,0,0,0],
+    total_capex:    [-3873280,-3500000,0,0,0,-273280,0,0,0,0,0,-1313764,-1890000,0,0,0],
+    cap_pagado:     [0,-97059,-5103675,-6000000,0,-6666667,0,-97059,-68175,0,0,-6666667,0,-97059,-68175,0],
+    int_pagados:    [0,-15873,-380767,-555995,0,-893313,0,-5651415,0,0,0,-561444,0,-11904,0,0],
+    ret_iigg:       [-303333,-1667,-39980,-361712,0,-239182,-303333,-1466,0,0,0,-158552,0,-1250,0,0],
+    total_cf_fin:   [-303333,-114598,-5524422,-6917707,0,-7799162,-303333,-5749940,-68175,0,0,-7386663,0,-110214,-68175,0],
+    fcf:            [-1855457,-6452109,327338,-10803234,-5950421,-10459575,-2693381,-7758581,-3173012,-1963923,-3474112,-8952550,-3523806,-6322502,-5478413,-2832253],
+    fcf_acum:       [-1855457,-8307567,-7980229,-18783463,-24733884,-35193459,-37886841,-45645421,-48818433,-50782356,-54256468,-63209018,-66732824,-73055326,-78533739,-81365993],
+    caja_final:     [5144543,-1307567,-980229,-11783463,-17733884,-28193459,-30886841,-38645421,-41818433,-43782356,-47256468,-56209018,-59732824,-66055326,-71533739,-74365993],
+    stock_sem:      [22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477,22537477],
+    sem_nueva:      [0,0,0,0,0,0,0,0,2694427,7594451,14265145,15163288,18731608,24994705,37400092,52751179],
+    caja_stock:     [27682020,21229910,21557248,10754014,4803593,-5655982,-8349364,-16107944,-16586530,-13650428,-10453846,-18508254,-18463739,-18523144,-11596170,922663],
+};
+
+const cfAltExtra = [0,2000000,0,4000000,6000000,4000000,0,0,2694427,4900024,6670694,898142,3568320,6263097,12405387,15351087];
+
+let cfCurrentScenario = 'base';
+let cfCurrentView = 'mensual';
+let cfChartEvol = null, cfChartFCF = null, cfChartStack = null;
+
+function getCFData() {
+    if (cfCurrentScenario === 'base') return cfBase;
+    const d = JSON.parse(JSON.stringify(cfBase));
+    let cumExtra = 0;
+    for (let i = 0; i < 16; i++) {
+        const ex = cfAltExtra[i] || 0;
+        d.total_ing[i] += ex;
+        d.cf_op[i] += ex;
+        d.fcf[i] += ex;
+    }
+    let cum = 0;
+    d.fcf.forEach((v,i) => { cum += v; d.fcf_acum[i] = cum; });
+    let caja = 7000000;
+    for (let i = 0; i < 16; i++) {
+        d.caja_inicio[i] = caja;
+        d.caja_final[i] = caja + d.fcf[i];
+        caja = d.caja_final[i];
+    }
+    d.caja_stock = d.caja_final.map((c,i) => c + d.stock_sem[i] + d.sem_nueva[i]);
+    return d;
+}
+
+function fmtCF(v) {
+    if (v === 0) return '—';
+    const abs = Math.abs(Math.round(v));
+    const s = abs.toLocaleString('es-AR');
+    return v < 0 ? '('+s+')' : s;
+}
+function fmtCFClass(v) {
+    if (v > 0) return ' c-green fw-600';
+    if (v < 0) return ' c-red';
+    return '';
+}
+
+function renderCF() {
+    const d = getCFData();
+    const isAcum = cfCurrentView === 'acumulado';
+
+    const cajaFinal = d.caja_final[15];
+    const cajaStock = d.caja_stock[15];
+    const peakNeg = Math.min(...d.caja_final);
+    const peakNegIdx = d.caja_final.indexOf(peakNeg);
+    const totalIng = d.total_ing.reduce((a,b)=>a+b,0);
+
+    document.getElementById('cf-kpis').innerHTML = `
+    <div class="kpi-row" style="margin-bottom:24px;">
+        <div class="kpi ${cajaFinal>=0?'kpi-green':'kpi-red'}">
+            <div class="kpi-label">Caja Final Jun'27</div>
+            <div class="kpi-value ${cajaFinal>=0?'v-green':'v-red'}">${cajaFinal<0?'(':''}USD ${Math.abs(Math.round(cajaFinal)).toLocaleString('es-AR')}${cajaFinal<0?')':''}</div>
+            <div class="kpi-sub">Escenario ${cfCurrentScenario==='base'?'Base':'Alternativo'}</div>
+        </div>
+        <div class="kpi ${cajaStock>=0?'kpi-blue':'kpi-amber'}">
+            <div class="kpi-label">Caja + Stock Jun'27</div>
+            <div class="kpi-value ${cajaStock>=0?'v-blue':'v-amber'}">${cajaStock<0?'(':''}USD ${Math.abs(Math.round(cajaStock)).toLocaleString('es-AR')}${cajaStock<0?')':''}</div>
+            <div class="kpi-sub">Incluye sementera valuada</div>
+        </div>
+        <div class="kpi kpi-red">
+            <div class="kpi-label">Pico Negativo de Caja</div>
+            <div class="kpi-value v-red">(USD ${Math.abs(Math.round(peakNeg)).toLocaleString('es-AR')})</div>
+            <div class="kpi-sub">${cfMonths[peakNegIdx]} &mdash; m&aacute;xima necesidad</div>
+        </div>
+        <div class="kpi kpi-green">
+            <div class="kpi-label">Total Ingresos Proyectados</div>
+            <div class="kpi-value v-green">USD ${Math.round(totalIng).toLocaleString('es-AR')}</div>
+            <div class="kpi-sub">Granos + Ganader&iacute;a &middot; Campa&ntilde;a 25/26</div>
+        </div>
+    </div>`;
+
+    if (cfChartEvol) cfChartEvol.destroy();
+    const cajaArr = isAcum ? d.fcf_acum : d.caja_final;
+    document.getElementById('cfChartBadge').textContent = isAcum ? 'Acumulado USD' : 'Mensual USD';
+    const ds1 = { label: isAcum?'FCF Acumulado':'Caja Final', data: cajaArr, borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,0.07)', fill:true, tension:0.3, pointRadius:4, pointBackgroundColor:cajaArr.map(v=>v>=0?'#059669':'#dc2626'), borderWidth:2 };
+    const datasets = [ds1];
+    if (!isAcum) datasets.push({ label:'Caja + Stock', data:d.caja_stock, borderColor:'#059669', backgroundColor:'rgba(5,150,105,0)', borderDash:[5,3], tension:0.3, pointRadius:3, pointBackgroundColor:'#059669', borderWidth:2 });
+    cfChartEvol = new Chart(document.getElementById('chartCFEvol'), {
+        type:'line', data:{ labels:cfMonths, datasets },
+        options:{ responsive:true, maintainAspectRatio:false,
+            plugins:{ legend:{position:'top',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:12,weight:'500'}}},
+                tooltip:{backgroundColor:'#0f172a',padding:10,cornerRadius:6,callbacks:{label:ctx=>' '+ctx.dataset.label+': USD '+Math.round(ctx.raw).toLocaleString('es-AR')}} },
+            scales:{ x:{grid:{display:false}}, y:{ticks:{callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K'},grid:{color:'#f1f5f9'}} } }
+    });
+
+    if (cfChartFCF) cfChartFCF.destroy();
+    const fcfArr = isAcum ? d.fcf_acum : d.fcf;
+    cfChartFCF = new Chart(document.getElementById('chartFCF'), {
+        type:'bar', data:{ labels:cfMonths, datasets:[{ label:isAcum?'FCF Acumulado':'FCF Mensual', data:fcfArr,
+            backgroundColor:fcfArr.map(v=>v>=0?'rgba(5,150,105,0.75)':'rgba(220,38,38,0.75)'), borderRadius:4 }] },
+        options:{ responsive:true, maintainAspectRatio:false,
+            plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f172a',padding:10,cornerRadius:6,callbacks:{label:ctx=>' USD '+Math.round(ctx.raw).toLocaleString('es-AR')}}},
+            scales:{ x:{grid:{display:false}}, y:{ticks:{callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K'},grid:{color:'#f1f5f9'}} } }
+    });
+
+    if (cfChartStack) cfChartStack.destroy();
+    const ingDs = [
+        {label:'Soja',data:d.soja,color:'#2563eb'},
+        {label:'Ma\u00edz',data:d.maiz,color:'#059669'},
+        {label:'Trigo Candeal',data:d.trigo_candeal,color:'#06b6d4'},
+        {label:'Garbanzo',data:d.garbanzo,color:'#7c3aed'},
+        {label:'Ganader\u00eda',data:d.ganaderia,color:'#be185d'},
+        {label:'Otros',data:d.soja.map((_,i)=>d.camelina[i]+d.girasol[i]+d.trigo_pan[i]),color:'#d97706'},
+    ];
+    const egDs = [
+        {label:'Costos Var.',data:d.costos_var,color:'rgba(220,38,38,0.65)'},
+        {label:'CV Pr\u00f3x.',data:d.costos_var_prox,color:'rgba(220,38,38,0.40)'},
+        {label:'Insumos',data:d.insumos,color:'rgba(239,68,68,0.55)'},
+        {label:'NERA',data:d.nera,color:'rgba(217,119,6,0.65)'},
+        {label:'Estructura',data:d.estructura,color:'rgba(100,116,139,0.65)'},
+        {label:'CAPEX',data:d.total_capex,color:'rgba(124,58,237,0.55)'},
+        {label:'CF Financiero',data:d.total_cf_fin,color:'rgba(15,23,42,0.50)'},
+    ];
+    cfChartStack = new Chart(document.getElementById('chartCFStack'), {
+        type:'bar',
+        data:{ labels:cfMonths, datasets:[
+            ...ingDs.map(it=>({label:it.label,data:it.data,backgroundColor:it.color,stack:'ing',borderRadius:2})),
+            ...egDs.map(it=>({label:it.label,data:it.data,backgroundColor:it.color,stack:'eg',borderRadius:2})),
+        ]},
+        options:{ responsive:true, maintainAspectRatio:false,
+            plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:11}}},
+                tooltip:{backgroundColor:'#0f172a',padding:10,cornerRadius:6,callbacks:{label:ctx=>' '+ctx.dataset.label+': USD '+Math.round(ctx.raw).toLocaleString('es-AR')}}},
+            scales:{ x:{stacked:true,grid:{display:false}}, y:{stacked:true,ticks:{callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K'},grid:{color:'#f1f5f9'}} } }
+    });
+
+    renderCFTable(d);
+}
+
+function renderCFTable(d) {
+    const N = cfMonths.length;
+    const th = `style="min-width:68px;font-size:11px;"`;
+    let h = `<table style="font-size:12px;"><thead><tr>
+        <th style="min-width:210px;position:sticky;left:0;background:var(--bg-card);z-index:2;">Concepto</th>
+        ${cfMonths.map(m=>`<th class="text-right" ${th}>${m}</th>`).join('')}
+        <th class="text-right" style="min-width:82px;font-size:11px;background:var(--bg-card);">TOTAL</th>
+    </tr></thead><tbody>`;
+
+    const sumRow = arr => arr.reduce((a,b)=>a+b,0);
+
+    function trDiv(label) {
+        return `<tr style="background:var(--bg-light);"><td colspan="${N+2}" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-label);padding:8px 12px;">${label}</td></tr>`;
+    }
+    function trRow(label, arr, bold=false, sticky=true) {
+        const tot = sumRow(arr);
+        const sc = sticky ? `style="position:sticky;left:0;background:var(--bg-card);z-index:1;"` : '';
+        return `<tr><td class="${bold?'fw-600':''}" ${sc}>${label}</td>${arr.map(v=>`<td class="text-right text-mono${fmtCFClass(v)}">${fmtCF(v)}</td>`).join('')}<td class="text-right text-mono fw-600${fmtCFClass(tot)}">${fmtCF(tot)}</td></tr>`;
+    }
+    function trTot(label, arr) {
+        const tot = sumRow(arr);
+        return `<tr class="row-total"><td style="position:sticky;left:0;background:#1e293b;z-index:1;">${label}</td>${arr.map(v=>`<td class="text-right text-mono${fmtCFClass(v)}">${fmtCF(v)}</td>`).join('')}<td class="text-right text-mono fw-600${fmtCFClass(tot)}">${fmtCF(tot)}</td></tr>`;
+    }
+
+    h += trDiv('Posición Inicial');
+    h += trRow('Caja &amp; Equiv. Inicio', d.caja_inicio, true);
+
+    h += trDiv('Ingresos');
+    h += trRow('Soja', d.soja);
+    h += trRow('Maíz', d.maiz);
+    h += trRow('Trigo Pan', d.trigo_pan);
+    h += trRow('Trigo Candeal', d.trigo_candeal);
+    h += trRow('Garbanzo', d.garbanzo);
+    h += trRow('Ganadería', d.ganaderia);
+    h += trRow('Camelina', d.camelina);
+    h += trRow('Girasol', d.girasol);
+    h += trTot('Total Ingresos', d.total_ing);
+
+    h += trDiv('Egresos Operativos');
+    h += trRow('Costos Variables 25/26', d.costos_var);
+    h += trRow('Costos Variables 26/27', d.costos_var_prox);
+    h += trRow('Insumos (deuda comercial)', d.insumos);
+    h += trRow('NERA', d.nera);
+    h += trRow('Estructura', d.estructura);
+    h += trTot('Total Egresos Operativos', d.total_eg_op);
+    h += trTot('CF Operativo', d.cf_op);
+
+    h += trDiv('CAPEX / Inversión');
+    h += trRow('Capex Inversión (Rubicon)', d.capex_inv);
+    h += trRow('Compra de Campos', d.compra_campos);
+    h += trTot('Total CAPEX', d.total_capex);
+
+    h += trDiv('Cash Flow Financiero');
+    h += trRow('Capital Pagado', d.cap_pagado);
+    h += trRow('Intereses Pagados', d.int_pagados);
+    h += trRow('Ret. IIGG / Fees', d.ret_iigg);
+    h += trTot('Total CF Financiero', d.total_cf_fin);
+
+    h += trDiv('Resultado');
+    h += trTot('FREE CASH FLOW', d.fcf);
+    h += trRow('FCF Acumulado', d.fcf_acum, true);
+    h += trTot('Caja &amp; Equiv. Final', d.caja_final);
+
+    h += trDiv('Valuación Stock &amp; Sementera');
+    h += trRow('Stock &amp; Sementera (25/26)', d.stock_sem);
+    h += trRow('Sementera Nueva Campaña', d.sem_nueva);
+    h += trTot('Caja + Stock Valuado', d.caja_stock);
+
+    h += '</tbody></table>';
+    document.getElementById('cfTableWrap').innerHTML = h;
+}
+
+function setCFScenario(s, btn) {
+    cfCurrentScenario = s;
+    document.querySelectorAll('#btnBase,#btnAlt').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCF();
+}
+function setCFView(v, btn) {
+    cfCurrentView = v;
+    document.querySelectorAll('#btnMensual,#btnAcum').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCF();
+}
+
+// Lazy-init: render CF only when tab is first opened
+const _origShowSection = showSection;
+showSection = function(id, btn) {
+    _origShowSection(id, btn);
+    if (id === 'cashflow' && !cfChartEvol) setTimeout(renderCF, 60);
+};
 </script>
 
 </body>
